@@ -9,10 +9,17 @@ body {
   min-height: 100vh;
 }
 
+/* Dark theme - force dark mode */
+html, body {
+  background-color: var(--dark-blue) !important;
+  color: var(--text-primary) !important;
+}
+
 /* Additional dark theme overrides */
 .card {
   background-color: rgba(26, 26, 46, 0.7) !important;
   border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
 }
 
 .card-header {
@@ -33,40 +40,106 @@ body {
 
 /* Ensure all text is visible in dark mode */
 label, p, h1, h2, h3, h4, h5, h6, .form-label, .form-check-label, .nav-link, .btn, .alert, .card-title, .card-text, code, pre, input, textarea, select, option {
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
+}
+
+/* Explicitly set dark mode for the tab content area */
+.tab-content {
+  background-color: rgba(26, 26, 46, 0.7) !important;
+  color: white !important;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 /* Improve code visibility */
 code {
-  background-color: rgba(26, 26, 46, 0.7);
+  background-color: rgba(26, 26, 46, 0.7) !important;
   padding: 4px 6px;
   border-radius: 4px;
   font-size: 0.9em;
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   word-break: break-word;
 }
 
 /* Ensure form text is visible */
 .form-text {
-  color: var(--text-secondary);
+  color: var(--text-secondary) !important;
   opacity: 0.9;
 }
 
-/* Ensure text in alerts is visible */
-.alert-info {
-  color: var(--text-primary);
-  background-color: rgba(0, 204, 255, 0.15);
-  border-left: 4px solid var(--secondary);
+/* Override Bootstrap defaults */
+.bg-light {
+  background-color: var(--dark) !important;
 }
 
-/* Ensure text in cards is visible */
-.card-body p, .card-body label, .card-body h5, .card-body .form-label, .card-body code {
-  color: var(--text-primary);
+.bg-white {
+  background-color: var(--dark) !important;
 }
 
-/* Ensure text in warp cards is visible */
-.warp-card-body p, .warp-card-body strong, .warp-card-body code {
-  color: var(--text-primary);
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+/* Strong dark mode switch styling */
+#darkModeSwitch:checked {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Dark mode for bootstrap components */
+.dropdown-menu {
+  background-color: var(--dark) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item {
+  color: var(--text-primary) !important;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(65, 97, 255, 0.2) !important;
+  color: var(--primary) !important;
+}
+
+.modal-content {
+  background-color: var(--dark) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.modal-header, .modal-footer {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.modal-title {
+  color: var(--text-primary) !important;
+}
+
+.close {
+  color: var(--text-primary) !important;
+}
+
+/* Override specific bootstrap components */
+.btn-outline-secondary {
+  color: var(--text-secondary) !important;
+  border-color: var(--text-secondary) !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: rgba(194, 194, 194, 0.1) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Ensure navbar is dark themed */
+.navbar {
+  background-color: rgba(15, 22, 36, 0.9) !important;
+}
+
+/* Ensure tables have proper dark styling */
+.table {
+  color: var(--text-primary) !important;
+}
+
+.table td, .table th {
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 :root {
@@ -232,17 +305,6 @@ body.dark-mode .particle {
 }
 
 /* Modern Card Styling */
-.card {
-  background: rgba(26, 26, 46, 0.7);
-  backdrop-filter: blur(10px);
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 2rem;
-}
-
 .card:hover {
   transform: translateY(-5px);
   box-shadow: var(--box-shadow-hover);
@@ -251,10 +313,8 @@ body.dark-mode .particle {
 
 .card-header {
   font-weight: bold;
-  background: var(--gradient-primary) !important;
   padding: 1.5rem;
   border-bottom: none;
-  color: var(--text-primary);
 }
 
 .card-body {
@@ -330,42 +390,43 @@ pre code {
 
 /* Navigation Tabs */
 .nav-tabs {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-tabs .nav-link {
-  color: var(--text-secondary) !important;
-  background-color: transparent !important;
-  border: none !important;
-  padding: 10px 15px !important;
-  margin-right: 5px !important;
-  position: relative !important;
-  transition: var(--transition) !important;
+  font-weight: 600;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 0;
+  color: var(--text-secondary);
+  position: relative;
+  transition: all 0.3s ease;
+  background-color: transparent;
 }
 
 .nav-tabs .nav-link::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 0 !important;
-  height: 2px !important;
-  background: var(--gradient-primary) !important;
-  transition: width 0.3s ease !important;
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
 }
 
 .nav-tabs .nav-link:hover::after {
-  width: 100% !important;
+  width: 100%;
 }
 
 .nav-tabs .nav-link.active {
-  color: var(--primary) !important;
-  background-color: transparent !important;
-  border: none !important;
+  color: var(--primary);
+  background-color: transparent;
+  border: none;
 }
 
 .nav-tabs .nav-link.active::after {
-  width: 100% !important;
+  width: 100%;
 }
 
 /* Buttons */
@@ -427,16 +488,6 @@ pre code {
 }
 
 /* Form Controls */
-.form-control {
-  background-color: rgba(26, 26, 46, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius);
-  color: var(--text-primary);
-  padding: 12px 15px;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-}
-
 .form-control:focus {
   background-color: rgba(26, 26, 46, 0.7);
   border-color: var(--primary);
