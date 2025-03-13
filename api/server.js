@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 // Set up the correct working directory paths
-const appDir = path.join(process.cwd(), 'wp');
+const appDir = path.join(process.cwd());
 // Update environment path for the serverless function
 process.env.PATH_TO_APP = appDir;
 
