@@ -198,7 +198,7 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <NavButton onClick={() => window.open('https://warpx-7d6ojchxi-sarthaknimjes-projects.vercel.app', '_blank')}>
+          <NavButton onClick={() => window.open('/app', '_self')}>
             Launch App
           </NavButton>
         </motion.div>

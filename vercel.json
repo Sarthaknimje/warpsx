@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "buildCommand": "cd wp/landing && npm install && npm run build && cd ../wp && npm install",
+  "outputDirectory": "wp/landing/build",
+  "rewrites": [
+    { 
+      "source": "/api/(.*)", 
+      "destination": "/api/server.js" 
+    },
+    { 
+      "source": "/app", 
+      "destination": "/api/server.js" 
+    },
+    { 
+      "source": "/app/(.*)", 
+      "destination": "/api/server.js" 
+    },
+    { 
+      "source": "/(.*)", 
+      "destination": "/index.html" 
+    }
+  ],
+  "functions": {
+    "api/server.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
+} 

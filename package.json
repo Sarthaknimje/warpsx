@@ -1,0 +1,28 @@
+{
+  "name": "warpx",
+  "version": "1.0.0",
+  "description": "MultiversX Warp Generator with Landing Page",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd wp && npm run web",
+    "dev": "cd wp && npm run dev:web",
+    "build": "cd wp/landing && npm install && npm run build && cd ../.. && cd wp && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sarthaknimje/warpsx.git"
+  },
+  "keywords": [
+    "multiversx",
+    "blockchain",
+    "warp",
+    "defi"
+  ],
+  "author": "MultiversX Hackathon Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sarthaknimje/warpsx/issues"
+  },
+  "homepage": "https://github.com/Sarthaknimje/warpsx#readme"
+} 

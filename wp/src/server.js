@@ -532,7 +532,14 @@ app.post('/preview-warp', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-}); 
+// Only start the server if this file is run directly
+// Otherwise, export the app for serverless function
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Visit http://localhost:${PORT} to get started`);
+  });
+}
+
+// Export the Express app for serverless functions
+module.exports = { app }; 
