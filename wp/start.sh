@@ -11,7 +11,6 @@ WARP_PID=$!
 
 # Start the Telegram bot
 echo "Starting Telegram bot..."
-cd "$BASE_DIR/ai"
 npm run bot &
 BOT_PID=$!
 
