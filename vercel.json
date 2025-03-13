@@ -16,10 +16,25 @@
       "destination": "/api/server.js" 
     },
     { 
+      "source": "/generate", 
+      "destination": "/api/server.js" 
+    },
+    { 
       "source": "/(.*)", 
       "destination": "/index.html" 
     }
   ],
+  "env": {
+    "NODE_ENV": "production",
+    "MULTIVERSX_CHAIN_ID": "D",
+    "MULTIVERSX_API_URL": "https://devnet-api.multiversx.com",
+    "MULTIVERSX_GATEWAY_URL": "https://devnet-gateway.multiversx.com",
+    "WARP_CLIENT_URL": "https://devnet.usewarp.to",
+    "WARP_REGISTRY_ADDRESS": "erd1qqqqqqqqqqqqqpgqje2f99vr6r7sk54thg03c9suzcvwr4nfl3tsfkdl36",
+    "WALLET_ADDRESS": "erd1709y9mhz6487cfzv6t9xpa6hyxtc5kv4zl4za377tn0tqrhtht6sfrdfta",
+    "MOCK_MODE": "false",
+    "WARP_ENV": "devnet"
+  },
   "functions": {
     "api/server.js": {
       "memory": 1024,
