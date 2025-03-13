@@ -23,26 +23,26 @@ if (!fs.existsSync(tempDir)) {
 // Welcome message
 bot.start(async (ctx) => {
   const welcomeMessage = `
-🚀 *Welcome to WarpX Bot!* 🚀
+🚀 <b>Welcome to WarpX Bot!</b> 🚀
 
 I can help you create MultiversX warps with natural language prompts. Here are some examples of what you can ask me:
 
-*Staking Operations:*
+<b>Staking Operations:</b>
 • I want to stake 1 EGLD with Hatom
 • I want to stake 2 EGLD with XOXNO
 • I want to undelegate my XEGLD tokens from XOXNO
 
-*Query Functions:*
+<b>Query Functions:</b>
 • Check protocol reserves for Hatom
 • Show me the rewards reserve for Hatom
 • What is the cash reserve for Hatom?
 
-*NFT Operations:*
+<b>NFT Operations:</b>
 • I want to buy an NFT on XOXNO with 1 EGLD
 • I want to bid 1 EGLD on an NFT on XOXNO
 • I want to list my NFT on XOXNO
 
-*Distribution Functions:*
+<b>Distribution Functions:</b>
 • I want to bulksend EGLD to multiple addresses
 • I want to smart send EGLD to multiple addresses
 
@@ -51,23 +51,23 @@ Just send me a message with what you want to do, and I'll generate a warp for yo
 For a complete list of available commands, type /help.
 `;
 
-  await ctx.replyWithMarkdown(welcomeMessage);
+  await ctx.replyWithHTML(welcomeMessage);
 });
 
 // Help command
 bot.help(async (ctx) => {
   const helpMessage = `
-*WarpX Bot Commands*
+<b>WarpX Bot Commands</b>
 
 /start - Start the bot and see welcome message
 /help - Show this help message
 /examples - Show example prompts for different operations
 
-*How to create a warp:*
+<b>How to create a warp:</b>
 Simply send a message describing what operation you want to perform. 
 For example: "I want to stake 1 EGLD with Hatom"
 
-*Supported Operations:*
+<b>Supported Operations:</b>
 • Staking with Hatom and XOXNO
 • Unstaking from XOXNO
 • NFT Marketplace operations (buy, bid, list, etc.)
@@ -77,20 +77,20 @@ For example: "I want to stake 1 EGLD with Hatom"
 Each warp will be generated with a QR code and a link that you can use to execute the transaction.
 `;
 
-  await ctx.replyWithMarkdown(helpMessage);
+  await ctx.replyWithHTML(helpMessage);
 });
 
 // Examples command
 bot.command('examples', async (ctx) => {
   const examplesMessage = `
-*Example Prompts for WarpX Bot*
+<b>Example Prompts for WarpX Bot</b>
 
-*Staking Examples:*
+<b>Staking Examples:</b>
 • "I want to stake 1 EGLD with Hatom"
 • "I want to stake 2 EGLD with XOXNO"
 • "I want to undelegate my XEGLD tokens from XOXNO"
 
-*Query Examples:*
+<b>Query Examples:</b>
 • "Check protocol reserves for Hatom"
 • "Show me the rewards reserve for Hatom"
 • "What is the cash reserve for Hatom?"
@@ -98,13 +98,13 @@ bot.command('examples', async (ctx) => {
 • "What is the total withdrawn EGLD on XOXNO?"
 • "Show me the undelegate token name for Hatom"
 
-*Contract Function Examples:*
+<b>Contract Function Examples:</b>
 • "I want to migrate pending 0.5 EGLD on XOXNO"
 • "Add rewards of 1 EGLD to XOXNO"
 • "Deposit 0.5 EGLD to XOXNO marketplace"
 • "Set undelegate token roles for Hatom"
 
-*NFT Marketplace Examples:*
+<b>NFT Marketplace Examples:</b>
 • "I want to buy an NFT on XOXNO with 1 EGLD"
 • "I want to buy swap on XOXNO with 1 EGLD"
 • "I want to buy for erd1... an NFT on XOXNO with 1 EGLD"
@@ -112,14 +112,14 @@ bot.command('examples', async (ctx) => {
 • "I want to list my NFT on XOXNO"
 • "I want to send offer of 1 EGLD for an NFT on XOXNO"
 
-*Distribution Examples:*
+<b>Distribution Examples:</b>
 • "I want to bulksend EGLD to multiple addresses"
 • "I want to bulksend same amount of EGLD to multiple addresses"
 • "I want to smart send EGLD to multiple addresses"
 • "I want to smart nft send with Remarkable Tools"
 `;
 
-  await ctx.replyWithMarkdown(examplesMessage);
+  await ctx.replyWithHTML(examplesMessage);
 });
 
 // Process all text messages as prompts for warp generation
@@ -142,12 +142,15 @@ bot.on('text', async (ctx) => {
     const processingMsg = await ctx.reply('🔄 Processing your request...');
     
     // Process the prompt to generate a warp
-    const result = await processPrompt(prompt, alias);
-    
-    if (result && result.success) {
-      // Generate QR code
+    try {
+      const result = await processPrompt(prompt, alias);
+      
+      // Generate QR code using the warp link format from the result
       const qrCodePath = path.join(tempDir, `${alias}.png`);
-      await QRCode.toFile(qrCodePath, result.warpLink, {
+      const warpLink = `https://devnet.usewarp.to/hash%3A${result.txHash}`;
+      const explorerLink = `https://devnet-explorer.multiversx.com/transactions/${result.txHash}`;
+      
+      await QRCode.toFile(qrCodePath, warpLink, {
         errorCorrectionLevel: 'H',
         margin: 1,
         width: 300,
@@ -157,55 +160,65 @@ bot.on('text', async (ctx) => {
         }
       });
       
-      // Create response message
+      // Create response message with proper Telegram markdown
       const successMessage = `
 ✅ *Warp Generated Successfully!*
 
 *Prompt:* ${prompt}
 *Alias:* ${alias}
 
-*Warp Link:* [Click Here](${result.warpLink})
-*Explorer Link:* [View on Explorer](${result.explorerLink})
+*Warp Link:* [Click Here](${warpLink})
+*Explorer Link:* [View on Explorer](${explorerLink})
 
 Scan the QR code to use this warp, or click on the link above.
 `;
       
-      // Send QR code with the message
+      // Send QR code with the message - using HTML parse mode for more reliable link rendering
       await ctx.deleteMessage(processingMsg.message_id);
       await ctx.replyWithPhoto({ source: qrCodePath }, { 
-        caption: successMessage,
-        parse_mode: 'Markdown'
+        caption: `
+✅ <b>Warp Generated Successfully!</b>
+
+<b>Prompt:</b> ${prompt}
+<b>Alias:</b> ${alias}
+
+<b>Warp Link:</b> <a href="${warpLink}">Click Here</a>
+<b>Explorer Link:</b> <a href="${explorerLink}">View on Explorer</a>
+
+Scan the QR code to use this warp, or click on the links above.
+`,
+        parse_mode: 'HTML'
       });
       
       // Delete the temporary QR code file
       fs.unlinkSync(qrCodePath);
-    } else {
+    } catch (error) {
+      console.error('Error processing prompt:', error);
+      
       // Handle error
-      const errorMessage = result?.error || 'Unknown error occurred';
-      const helpfulTips = result?.helpfulTips?.join('\n• ') || '';
+      const errorMessage = error.message || 'Unknown error occurred';
       
       const errorResponse = `
-❌ *Error Generating Warp*
+❌ <b>Error Generating Warp</b>
 
-*Error:* ${errorMessage}
-${helpfulTips ? `\n*Helpful Tips:*\n• ${helpfulTips}` : ''}
+<b>Error:</b> ${errorMessage}
 
 Please try again with a different prompt or check /examples for guidance.
 `;
       
       await ctx.deleteMessage(processingMsg.message_id);
-      await ctx.replyWithMarkdown(errorResponse);
+      await ctx.replyWithHTML(errorResponse);
     }
-  } catch (error) {
-    console.error('Bot error:', error);
+  } catch (generalError) {
+    console.error('Bot error:', generalError);
     
     // Provide a user-friendly error message
-    await ctx.replyWithMarkdown(`
-❌ *Error*
+    await ctx.replyWithHTML(`
+❌ <b>Error</b>
 
 Sorry, something went wrong while processing your request. Please try again later.
 
-*Technical details:* ${error.message}
+<b>Technical details:</b> ${generalError.message}
 `);
   }
 });
