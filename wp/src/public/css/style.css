@@ -1,0 +1,762 @@
+/* Base Styles */
+body {
+  background-color: #0F1624 !important; /* Force dark background */
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  color: #FFFFFF !important; /* Force light text */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Additional dark theme overrides */
+.card {
+  background-color: rgba(26, 26, 46, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.card-header {
+  background: linear-gradient(90deg, #4161FF 0%, #00CCFF 100%) !important;
+  color: white !important;
+}
+
+.card-body {
+  background-color: rgba(26, 26, 46, 0.7) !important;
+  color: white !important;
+}
+
+.form-control {
+  background-color: rgba(30, 30, 50, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+/* Ensure all text is visible in dark mode */
+label, p, h1, h2, h3, h4, h5, h6, .form-label, .form-check-label, .nav-link, .btn, .alert, .card-title, .card-text, code, pre, input, textarea, select, option {
+  color: var(--text-primary);
+}
+
+/* Improve code visibility */
+code {
+  background-color: rgba(26, 26, 46, 0.7);
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+/* Ensure form text is visible */
+.form-text {
+  color: var(--text-secondary);
+  opacity: 0.9;
+}
+
+/* Ensure text in alerts is visible */
+.alert-info {
+  color: var(--text-primary);
+  background-color: rgba(0, 204, 255, 0.15);
+  border-left: 4px solid var(--secondary);
+}
+
+/* Ensure text in cards is visible */
+.card-body p, .card-body label, .card-body h5, .card-body .form-label, .card-body code {
+  color: var(--text-primary);
+}
+
+/* Ensure text in warp cards is visible */
+.warp-card-body p, .warp-card-body strong, .warp-card-body code {
+  color: var(--text-primary);
+}
+
+:root {
+  --primary: #4161FF;
+  --primary-light: #6A83FF;
+  --primary-dark: #2A45D8;
+  --secondary: #00CCFF;
+  --secondary-light: #35E0FF;
+  --secondary-dark: #0099CC;
+  --accent: #FF5CAA;
+  --accent-light: #FF80BC;
+  --accent-dark: #E13A8A;
+  --dark: #1A1A2E;
+  --dark-blue: #0F1624;
+  --dark-card: #1F2937;
+  --text-primary: #FFFFFF;
+  --text-secondary: #C2C2C2;
+  --success: #00C853;
+  --success-light: #69F0AE;
+  --warning: #FFD600;
+  --warning-light: #FFEA00;
+  --error: #FF5252;
+  --error-light: #FF8A80;
+  --gradient-primary: linear-gradient(90deg, var(--primary), var(--secondary));
+  --gradient-accent: linear-gradient(90deg, var(--accent), var(--primary));
+  --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --box-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.2);
+  --transition: all 0.3s ease;
+  --border-radius: 8px;
+  --border-radius-lg: 16px;
+}
+
+/* Particles Background */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.particle:nth-child(1) {
+  width: 80px;
+  height: 80px;
+  left: 10%;
+  top: 20%;
+  animation: float 15s ease-in-out infinite;
+  filter: blur(8px);
+}
+
+.particle:nth-child(2) {
+  width: 120px;
+  height: 120px;
+  right: 15%;
+  top: 30%;
+  animation: float 18s ease-in-out infinite reverse;
+  filter: blur(12px);
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--accent) 100%);
+}
+
+.particle:nth-child(3) {
+  width: 60px;
+  height: 60px;
+  left: 20%;
+  bottom: 20%;
+  animation: float 12s ease-in-out infinite 2s;
+  filter: blur(6px);
+}
+
+.particle:nth-child(4) {
+  width: 100px;
+  height: 100px;
+  right: 25%;
+  bottom: 15%;
+  animation: float 20s ease-in-out infinite 1s;
+  filter: blur(10px);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+}
+
+.particle:nth-child(5) {
+  width: 40px;
+  height: 40px;
+  left: 40%;
+  top: 10%;
+  animation: float 10s ease-in-out infinite 3s;
+  filter: blur(4px);
+}
+
+.particle:nth-child(6) {
+  width: 70px;
+  height: 70px;
+  right: 5%;
+  top: 60%;
+  animation: float 16s ease-in-out infinite 2s;
+  filter: blur(7px);
+}
+
+.particle:nth-child(7) {
+  width: 90px;
+  height: 90px;
+  left: 5%;
+  bottom: 40%;
+  animation: float 14s ease-in-out infinite 1s;
+  filter: blur(9px);
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+}
+
+.particle:nth-child(8) {
+  width: 50px;
+  height: 50px;
+  right: 40%;
+  bottom: 5%;
+  animation: float 13s ease-in-out infinite;
+  filter: blur(5px);
+}
+
+.particle:nth-child(9) {
+  width: 110px;
+  height: 110px;
+  left: 30%;
+  top: 50%;
+  animation: float 17s ease-in-out infinite 3s;
+  filter: blur(11px);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+}
+
+.particle:nth-child(10) {
+  width: 65px;
+  height: 65px;
+  right: 10%;
+  top: 10%;
+  animation: float 11s ease-in-out infinite 2s;
+  filter: blur(6.5px);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-15px, 15px);
+  }
+  50% {
+    transform: translate(15px, 30px);
+  }
+  75% {
+    transform: translate(15px, -15px);
+  }
+}
+
+body.dark-mode .particle {
+  opacity: 0.15;
+}
+
+/* Modern Card Styling */
+.card {
+  background: rgba(26, 26, 46, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header {
+  font-weight: bold;
+  background: var(--gradient-primary) !important;
+  padding: 1.5rem;
+  border-bottom: none;
+  color: var(--text-primary);
+}
+
+.card-body {
+  padding: 1.8rem;
+}
+
+/* QR Code Styling */
+.qr-code-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  display: inline-block;
+  text-align: center;
+  overflow: auto;
+  max-width: 100%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.qr-code-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+#qrcode {
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+#qrcode img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+body.light-mode .qr-code-container {
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Code Blocks */
+pre code {
+  background-color: rgba(26, 26, 46, 0.5);
+  padding: 15px;
+  border-radius: 12px;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+/* Example Prompts */
+.example-prompt {
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background-color: rgba(26, 26, 46, 0.5);
+  margin-bottom: 8px;
+  border-left: 3px solid var(--primary);
+  color: var(--text-primary);
+}
+
+.example-prompt:hover {
+  background-color: rgba(65, 97, 255, 0.2);
+  transform: translateX(5px);
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.nav-tabs .nav-link {
+  color: var(--text-secondary) !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 10px 15px !important;
+  margin-right: 5px !important;
+  position: relative !important;
+  transition: var(--transition) !important;
+}
+
+.nav-tabs .nav-link::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 0 !important;
+  height: 2px !important;
+  background: var(--gradient-primary) !important;
+  transition: width 0.3s ease !important;
+}
+
+.nav-tabs .nav-link:hover::after {
+  width: 100% !important;
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--primary) !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.nav-tabs .nav-link.active::after {
+  width: 100% !important;
+}
+
+/* Buttons */
+.btn {
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(65, 97, 255, 0.3);
+  color: var(--text-primary);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(65, 97, 255, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--primary) !important;
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: rgba(65, 97, 255, 0.1);
+  transform: translateY(-3px);
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background-color: rgba(65, 97, 255, 0.1);
+  color: var(--primary-light);
+  border-color: var(--primary-light);
+}
+
+.btn-outline-info {
+  color: var(--secondary);
+  border-color: var(--secondary);
+  background: transparent;
+}
+
+.btn-outline-info:hover {
+  background-color: rgba(0, 204, 255, 0.1);
+  color: var(--secondary-light);
+  border-color: var(--secondary-light);
+}
+
+/* Form Controls */
+.form-control {
+  background-color: rgba(26, 26, 46, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  padding: 12px 15px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  background-color: rgba(26, 26, 46, 0.7);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.25rem rgba(65, 97, 255, 0.25);
+  color: var(--text-primary);
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+textarea.form-control {
+  min-height: 100px;
+}
+
+/* Dark Mode Toggle */
+.form-check-input {
+  background-color: rgba(26, 26, 46, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Alerts */
+.alert {
+  border-radius: var(--border-radius);
+  border: none;
+  padding: 1rem 1.5rem;
+}
+
+.alert-success {
+  background-color: rgba(0, 200, 83, 0.2);
+  color: var(--success-light);
+  border-left: 4px solid var(--success);
+}
+
+.alert-danger {
+  background-color: rgba(255, 82, 82, 0.2);
+  color: var(--error-light);
+  border-left: 4px solid var(--error);
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .card-header {
+    padding: 1.2rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-header {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 1.2rem;
+  }
+  
+  .nav-tabs .nav-link {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Light Mode Overrides */
+body.light-mode {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+body.light-mode label, 
+body.light-mode p, 
+body.light-mode h1, 
+body.light-mode h2, 
+body.light-mode h3, 
+body.light-mode h4, 
+body.light-mode h5, 
+body.light-mode h6, 
+body.light-mode .form-label, 
+body.light-mode .form-check-label, 
+body.light-mode .nav-link, 
+body.light-mode .btn-outline-primary,
+body.light-mode .btn-outline-secondary,
+body.light-mode .btn-outline-info,
+body.light-mode .card-title, 
+body.light-mode .card-text,
+body.light-mode code,
+body.light-mode input,
+body.light-mode textarea,
+body.light-mode select,
+body.light-mode option {
+  color: #333;
+}
+
+body.light-mode code {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+body.light-mode .form-text {
+  color: #6c757d;
+}
+
+body.light-mode .alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-left: 4px solid #0c5460;
+}
+
+body.light-mode .card-body p, 
+body.light-mode .card-body label, 
+body.light-mode .card-body h5, 
+body.light-mode .card-body .form-label {
+  color: #333;
+}
+
+body.light-mode .warp-card-body p, 
+body.light-mode .warp-card-body strong {
+  color: #333;
+}
+
+body.light-mode .warp-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .warp-card-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Warp List Styling */
+.warp-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.warp-card {
+  background: rgba(26, 26, 46, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.warp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.warp-card-header {
+  background: var(--gradient-primary);
+  padding: 15px;
+  color: white;
+  font-weight: 600;
+  border-bottom: none;
+}
+
+.warp-card-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.warp-card-footer {
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.warp-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.warp-status-success {
+  background-color: rgba(0, 200, 83, 0.2);
+  color: var(--success-light);
+}
+
+.warp-status-pending {
+  background-color: rgba(255, 214, 0, 0.2);
+  color: var(--warning-light);
+}
+
+.warp-status-failed {
+  background-color: rgba(255, 82, 82, 0.2);
+  color: var(--error-light);
+}
+
+/* Local Storage Indicator */
+.storage-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.5s forwards, fadeOut 0.5s 3s forwards;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Light Mode Warp Card Styling */
+body.light-mode .warp-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .warp-card-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Enhanced Form Styling */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Improve modal text visibility */
+.modal-content {
+  background-color: var(--dark);
+  color: var(--text-primary);
+}
+
+.modal-header, .modal-body, .modal-footer {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.modal-title {
+  color: var(--text-primary);
+}
+
+body.light-mode .modal-content {
+  background-color: #fff;
+  color: #333;
+}
+
+body.light-mode .modal-header, 
+body.light-mode .modal-body, 
+body.light-mode .modal-footer {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .modal-title {
+  color: #333;
+}

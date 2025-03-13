@@ -410,7 +410,7 @@ const Telegram = () => {
                 </TelegramButton>
                 
                 <SecondaryButton 
-                  href="http://localhost:3000" 
+                  href="https://warpx-app.vercel.app/app" 
                   target="_blank"
                   rel="noreferrer"
                   whileHover={{ scale: 1.05 }}
