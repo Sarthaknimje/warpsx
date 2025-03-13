@@ -24,15 +24,53 @@
     <div class="particle"></div>
   </div>
 
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="card shadow">
-          <div class="card-header text-white">
-            <h1 class="text-center">MultiversX AI Warp Generator</h1>
-            <p class="text-center mb-0">Create blockchain transactions with natural language</p>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <!-- Modern gradient header -->
+        <div class="header-container text-center mb-4">
+          <h1 class="gradient-text">MultiversX AI Warp Generator</h1>
+          <p class="text-white-50 mb-0">Create blockchain transactions with natural language</p>
+        </div>
+
+        <!-- Main navigation with buttons -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="d-flex">
+            <a href="/my-warps" class="btn btn-outline-primary me-2">
+              <i class="fas fa-list-ul me-2"></i>My Warps
+            </a>
+            <a href="/warp-stats" class="btn btn-outline-info">
+              <i class="fas fa-chart-bar me-2"></i>Statistics
+            </a>
           </div>
-          <div class="card-body">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
+            <label class="form-check-label" for="darkModeSwitch">
+              <i class="fas fa-moon me-2"></i>Dark Mode
+            </label>
+          </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="modern-tabs mb-4">
+          <nav>
+            <div class="nav nav-pills" id="nav-tab" role="tablist">
+              <button class="nav-link active" id="generate-tab" data-bs-toggle="tab" data-bs-target="#generate" type="button" role="tab" aria-controls="generate" aria-selected="true">
+                <i class="fas fa-magic me-2"></i>Generate Warp
+              </button>
+              <button class="nav-link" id="contract-tab" data-bs-toggle="tab" data-bs-target="#contract-form" type="button" role="tab" aria-controls="contract-form" aria-selected="false">
+                <i class="fas fa-file-contract me-2"></i>Direct Contract
+              </button>
+              <a class="nav-link" href="/batch-create">
+                <i class="fas fa-layer-group me-2"></i>Batch Create
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="card modern-card shadow">
+          <div class="card-body p-4">
             <% if (error) { %>
               <div class="alert alert-danger fade-in">
                 <strong><i class="fas fa-exclamation-circle me-2"></i>Error:</strong> <%= error %>
@@ -48,41 +86,6 @@
               </div>
             <% } %>
 
-            <div class="mb-4 d-flex justify-content-between align-items-center">
-              <div>
-                <a href="/my-warps" class="btn btn-outline-primary">
-                  <i class="fas fa-list-ul me-2"></i>My Warps
-                </a>
-                <a href="/warp-stats" class="btn btn-outline-info ms-2">
-                  <i class="fas fa-chart-bar me-2"></i>Statistics
-                </a>
-              </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="darkModeSwitch">
-                <label class="form-check-label" for="darkModeSwitch">
-                  <i class="fas fa-moon me-2"></i>Dark Mode
-                </label>
-              </div>
-            </div>
-
-            <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="generate-tab" data-bs-toggle="tab" data-bs-target="#generate" type="button" role="tab" aria-controls="generate" aria-selected="true">
-                  <i class="fas fa-magic me-2"></i>Generate Warp
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="contract-tab" data-bs-toggle="tab" data-bs-target="#contract-form" type="button" role="tab" aria-controls="contract-form" aria-selected="false">
-                  <i class="fas fa-file-contract me-2"></i>Direct Contract
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" href="/batch-create">
-                  <i class="fas fa-layer-group me-2"></i>Batch Create
-                </a>
-              </li>
-            </ul>
-
             <div class="tab-content" id="myTabContent">
               <!-- Generate Warp Tab -->
               <div class="tab-pane fade show active" id="generate" role="tabpanel" aria-labelledby="generate-tab">
@@ -91,7 +94,7 @@
                     <label for="prompt" class="form-label">
                       <i class="fas fa-keyboard me-2"></i>Enter your prompt:
                     </label>
-                    <textarea class="form-control" id="prompt" name="prompt" rows="3" placeholder="Example: Stake 10 EGLD with validator erd123..." required></textarea>
+                    <textarea class="form-control modern-input" id="prompt" name="prompt" rows="3" placeholder="Example: Stake 10 EGLD with validator erd123..." required></textarea>
                   </div>
                   
                   <div class="mb-4">
@@ -125,8 +128,8 @@
                       <i class="fas fa-tag me-2"></i>Alias (optional):
                     </label>
                     <div class="input-group">
-                      <input type="text" class="form-control" id="alias" name="alias" placeholder="Enter a memorable name for your Warp">
-                      <button class="btn btn-outline-secondary" type="button" id="checkAliasBtn">
+                      <input type="text" class="form-control modern-input" id="alias" name="alias" placeholder="Enter a memorable name for your Warp">
+                      <button class="btn btn-outline-primary" type="button" id="checkAliasBtn">
                         <i class="fas fa-check-circle me-2"></i>Check Availability
                       </button>
                     </div>
@@ -152,7 +155,7 @@
                   </div>
                   
                   <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">
+                    <button type="submit" class="btn btn-primary btn-lg modern-button">
                       <i class="fas fa-bolt me-2"></i>Generate Warp
                     </button>
                   </div>

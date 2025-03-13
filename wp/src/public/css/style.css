@@ -811,3 +811,93 @@ body.light-mode .modal-footer {
 body.light-mode .modal-title {
   color: #333;
 }
+
+/* New Modern UI Styles */
+.gradient-text {
+  background: linear-gradient(90deg, #4161FF 0%, #00CCFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.header-container {
+  margin-bottom: 2rem;
+}
+
+.modern-card {
+  background-color: rgba(25, 27, 38, 0.7) !important;
+  border: 1px solid rgba(65, 97, 255, 0.1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(10px);
+}
+
+.modern-input {
+  background-color: rgba(15, 17, 26, 0.7) !important;
+  border: 1px solid rgba(65, 97, 255, 0.2) !important;
+  border-radius: 8px !important;
+  color: white !important;
+  padding: 12px 15px !important;
+  font-size: 1rem !important;
+}
+
+.modern-input:focus {
+  box-shadow: 0 0 0 3px rgba(65, 97, 255, 0.25) !important;
+  border-color: #4161FF !important;
+}
+
+.modern-button {
+  background: linear-gradient(90deg, #4161FF 0%, #00CCFF 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.modern-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(65, 97, 255, 0.3) !important;
+}
+
+.modern-tabs .nav-pills {
+  background-color: rgba(15, 17, 26, 0.5);
+  border-radius: 12px;
+  padding: 5px;
+  display: inline-flex;
+}
+
+.modern-tabs .nav-link {
+  color: var(--text-secondary) !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+  margin: 0 5px !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+}
+
+.modern-tabs .nav-link:hover {
+  color: white !important;
+  background-color: rgba(65, 97, 255, 0.1) !important;
+}
+
+.modern-tabs .nav-link.active {
+  background: linear-gradient(90deg, #4161FF 0%, #00CCFF 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(65, 97, 255, 0.3) !important;
+}
+
+.example-prompt {
+  background-color: rgba(15, 17, 26, 0.7) !important;
+  border-left: 3px solid #4161FF !important;
+  border-radius: 8px !important;
+  padding: 12px 15px !important;
+  transition: all 0.2s ease !important;
+}
+
+.example-prompt:hover {
+  background-color: rgba(65, 97, 255, 0.2) !important;
+  transform: translateX(5px) !important;
+}

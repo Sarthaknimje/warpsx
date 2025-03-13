@@ -1,11 +1,15 @@
 // WarpX UI Enhancement Script
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Dark mode toggle
+  // Apply modern UI enhancements
+  enhanceUIForModernDesign();
+  
+  // Dark mode toggle - always enabled by default
   const darkModeSwitch = document.getElementById('darkModeSwitch');
   if (darkModeSwitch) {
     // Always enable dark mode by default
     document.body.classList.add('dark-mode');
+    document.documentElement.classList.add('dark-theme');
     darkModeSwitch.checked = true;
     localStorage.setItem('darkMode', 'true');
     
@@ -16,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     darkModeSwitch.addEventListener('change', function() {
       if (this.checked) {
         document.body.classList.add('dark-mode');
+        document.documentElement.classList.add('dark-theme');
         localStorage.setItem('darkMode', 'true');
       } else {
         // Alert the user that the site is designed for dark mode
@@ -23,9 +28,39 @@ document.addEventListener('DOMContentLoaded', function() {
         // Force back to dark mode
         setTimeout(() => {
           document.body.classList.add('dark-mode');
+          document.documentElement.classList.add('dark-theme');
           this.checked = true;
           localStorage.setItem('darkMode', 'true');
         }, 100);
+      }
+    });
+  }
+  
+  // Function to enhance UI for modern design
+  function enhanceUIForModernDesign() {
+    // Add animation to card elements
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.classList.add('fade-in');
+      // Add modern-card class if not already present
+      if (!card.classList.contains('modern-card')) {
+        card.classList.add('modern-card');
+      }
+    });
+    
+    // Enhance form controls with modern styling
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(control => {
+      if (!control.classList.contains('modern-input')) {
+        control.classList.add('modern-input');
+      }
+    });
+    
+    // Enhance primary buttons
+    const primaryButtons = document.querySelectorAll('.btn-primary');
+    primaryButtons.forEach(button => {
+      if (!button.classList.contains('modern-button')) {
+        button.classList.add('modern-button');
       }
     });
   }
@@ -187,15 +222,6 @@ document.addEventListener('DOMContentLoaded', function() {
           this.innerHTML = originalText;
         }, 2000);
       });
-    });
-  }
-  
-  // Add animations to cards
-  const cards = document.querySelectorAll('.card');
-  
-  if (cards.length > 0) {
-    cards.forEach(card => {
-      card.classList.add('fade-in');
     });
   }
   
