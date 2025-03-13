@@ -430,7 +430,7 @@ const Hero = () => {
             <PrimaryButton
               whileHover={{ scale: 1.05, boxShadow: "0 15px 25px rgba(65, 97, 255, 0.4)" }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => window.open('/app', '_self')}
+              onClick={() => window.open('https://warpx-app.vercel.app/app', '_self')}
             >
               <FaRocket /> Launch App <FaArrowRight style={{ marginLeft: '5px' }} />
             </PrimaryButton>
