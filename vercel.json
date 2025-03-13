@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd wp/landing && npm install && npm run build && cd ../.. && cd wp && npm install",
+  "buildCommand": "chmod +x build.sh && ./build.sh",
   "outputDirectory": "wp/landing/build",
   "rewrites": [
     { 
