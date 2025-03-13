@@ -1,19 +1,29 @@
 // WarpX UI Enhancement Script
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Apply modern UI enhancements
+  // Always enable dark mode
+  document.body.classList.add('dark-mode');
+  document.documentElement.classList.add('dark-theme');
+  
+  // Store the dark mode preference in local storage
+  localStorage.setItem('darkMode', 'enabled');
+
+  // Initialize QR code if needed
+  initQRCode();
+  
+  // Initialize example prompts
+  initExamplePrompts();
+  
+  // Initialize alias checking
+  initAliasChecking();
+  
+  // Add animations and modern UI enhancements
   enhanceUIForModernDesign();
   
   // Dark mode toggle - always enabled by default
   const darkModeSwitch = document.getElementById('darkModeSwitch');
   if (darkModeSwitch) {
     // Always enable dark mode by default
-    document.body.classList.add('dark-mode');
-    document.documentElement.classList.add('dark-theme');
-    darkModeSwitch.checked = true;
-    localStorage.setItem('darkMode', 'true');
-    
-    // Add data attribute to indicate forced dark mode
     document.documentElement.setAttribute('data-forced-theme', 'dark');
     
     // Toggle dark mode (but restore to dark if user turns it off)
@@ -36,35 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Function to enhance UI for modern design
-  function enhanceUIForModernDesign() {
-    // Add animation to card elements
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-      card.classList.add('fade-in');
-      // Add modern-card class if not already present
-      if (!card.classList.contains('modern-card')) {
-        card.classList.add('modern-card');
-      }
-    });
-    
-    // Enhance form controls with modern styling
-    const formControls = document.querySelectorAll('.form-control');
-    formControls.forEach(control => {
-      if (!control.classList.contains('modern-input')) {
-        control.classList.add('modern-input');
-      }
-    });
-    
-    // Enhance primary buttons
-    const primaryButtons = document.querySelectorAll('.btn-primary');
-    primaryButtons.forEach(button => {
-      if (!button.classList.contains('modern-button')) {
-        button.classList.add('modern-button');
-      }
-    });
-  }
-  
   // Custom styling toggle
   const customStyleCheck = document.getElementById('customStyleCheck');
   const stylingOptions = document.getElementById('stylingOptions');
@@ -73,18 +54,20 @@ document.addEventListener('DOMContentLoaded', function() {
     customStyleCheck.addEventListener('change', function() {
       if (this.checked) {
         stylingOptions.style.display = 'flex';
-        // Add animation class
-        stylingOptions.classList.add('fade-in-down');
-        // Remove animation class after animation completes
+        stylingOptions.style.opacity = '0';
+        stylingOptions.style.transform = 'translateY(-10px)';
+        
         setTimeout(() => {
-          stylingOptions.classList.remove('fade-in-down');
-        }, 500);
+          stylingOptions.style.opacity = '1';
+          stylingOptions.style.transform = 'translateY(0)';
+          stylingOptions.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        }, 10);
       } else {
-        // Add fade out animation
-        stylingOptions.classList.add('fade-out');
+        stylingOptions.style.opacity = '0';
+        stylingOptions.style.transform = 'translateY(-10px)';
+        
         setTimeout(() => {
           stylingOptions.style.display = 'none';
-          stylingOptions.classList.remove('fade-out');
         }, 300);
       }
     });
@@ -240,4 +223,159 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-}); 
+});
+
+// Initialize QR code generator
+function initQRCode() {
+  const warpLinkElement = document.getElementById('warpLink');
+  const qrcodeElement = document.getElementById('qrcode');
+  
+  if (warpLinkElement && qrcodeElement) {
+    const warpLink = warpLinkElement.value;
+    
+    if (warpLink) {
+      // Clear previous QR code
+      qrcodeElement.innerHTML = '';
+      
+      // Generate QR code
+      new QRCode(qrcodeElement, {
+        text: warpLink,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+  }
+}
+
+// Initialize example prompts
+function initExamplePrompts() {
+  const exampleButtons = document.querySelectorAll('.example-prompt-btn');
+  const promptTextarea = document.getElementById('prompt');
+  
+  if (exampleButtons.length > 0 && promptTextarea) {
+    exampleButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const prompt = this.getAttribute('data-prompt');
+        promptTextarea.value = prompt;
+        promptTextarea.focus();
+        
+        // Add animation
+        this.classList.add('clicked');
+        setTimeout(() => {
+          this.classList.remove('clicked');
+        }, 300);
+      });
+    });
+  }
+}
+
+// Initialize alias checking
+function initAliasChecking() {
+  const checkButtons = [
+    { button: document.getElementById('checkAliasBtn'), input: document.getElementById('alias'), result: document.getElementById('aliasAvailabilityResult') },
+    { button: document.getElementById('checkDirectAliasBtn'), input: document.getElementById('directAlias'), result: document.getElementById('directAliasAvailabilityResult') }
+  ];
+  
+  checkButtons.forEach(({ button, input, result }) => {
+    if (button && input && result) {
+      button.addEventListener('click', function() {
+        const alias = input.value.trim();
+        
+        if (!alias) {
+          result.innerHTML = '<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Please enter an alias</span>';
+          return;
+        }
+        
+        // Add loading animation
+        result.innerHTML = '<span class="text-info"><i class="fas fa-spinner fa-spin me-2"></i>Checking...</span>';
+        button.disabled = true;
+        
+        // Check alias availability
+        fetch(`/check-alias?alias=${encodeURIComponent(alias)}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.available) {
+              result.innerHTML = '<span class="text-success"><i class="fas fa-check-circle me-2"></i>Alias is available!</span>';
+            } else {
+              result.innerHTML = '<span class="text-danger"><i class="fas fa-times-circle me-2"></i>Alias is already taken</span>';
+            }
+          })
+          .catch(error => {
+            console.error('Error checking alias:', error);
+            result.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-circle me-2"></i>Error checking alias</span>';
+          })
+          .finally(() => {
+            button.disabled = false;
+          });
+      });
+    }
+  });
+}
+
+// Add animations and modern UI enhancements
+function enhanceUIForModernDesign() {
+  // Add card animations
+  const cards = document.querySelectorAll('.app-content, .result-card');
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-5px)';
+      this.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+      this.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.15)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+    });
+  });
+  
+  // Enhanced form controls
+  const formControls = document.querySelectorAll('.form-control, .app-input');
+  formControls.forEach(control => {
+    control.addEventListener('focus', function() {
+      this.parentElement.classList.add('input-focused');
+    });
+    
+    control.addEventListener('blur', function() {
+      this.parentElement.classList.remove('input-focused');
+    });
+  });
+  
+  // Add hover effects to buttons
+  const buttons = document.querySelectorAll('.generate-btn, .check-btn, .nav-btn, .tab-btn');
+  buttons.forEach(button => {
+    button.addEventListener('mouseenter', function() {
+      this.style.transition = 'all 0.3s ease';
+    });
+  });
+  
+  // Custom style toggle animation
+  const customStyleCheck = document.getElementById('customStyleCheck');
+  const stylingOptions = document.getElementById('stylingOptions');
+  
+  if (customStyleCheck && stylingOptions) {
+    customStyleCheck.addEventListener('change', function() {
+      if (this.checked) {
+        stylingOptions.style.display = 'flex';
+        stylingOptions.style.opacity = '0';
+        stylingOptions.style.transform = 'translateY(-10px)';
+        
+        setTimeout(() => {
+          stylingOptions.style.opacity = '1';
+          stylingOptions.style.transform = 'translateY(0)';
+          stylingOptions.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        }, 10);
+      } else {
+        stylingOptions.style.opacity = '0';
+        stylingOptions.style.transform = 'translateY(-10px)';
+        
+        setTimeout(() => {
+          stylingOptions.style.display = 'none';
+        }, 300);
+      }
+    });
+  }
+} 
