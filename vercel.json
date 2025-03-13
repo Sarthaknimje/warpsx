@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "cd landing && npm install && npm run build && cd .. && npm install",
-  "outputDirectory": "landing/build",
+  "buildCommand": "cd wp/landing && npm install && npm run build && cd ../.. && cd wp && npm install",
+  "outputDirectory": "wp/landing/build",
   "rewrites": [
     { 
       "source": "/api/(.*)", 
