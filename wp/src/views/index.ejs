@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Particles background -->
+  <div class="particles-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+          <div class="card-header text-white">
+            <h1 class="text-center">MultiversX AI Warp Generator</h1>
+            <p class="text-center mb-0">Create blockchain transactions with natural language</p>
+          </div>
+          <div class="card-body">
+            <% if (error) { %>
+              <div class="alert alert-danger fade-in">
+                <strong><i class="fas fa-exclamation-circle me-2"></i>Error:</strong> <%= error %>
+                <% if (typeof helpfulTips !== 'undefined' && helpfulTips.length > 0) { %>
+                  <hr>
+                  <p><strong><i class="fas fa-lightbulb me-2"></i>Helpful Tips:</strong></p>
+                  <ul>
+                    <% helpfulTips.forEach(tip => { %>
+                      <li><%= tip %></li>
+                    <% }); %>
+                  </ul>
+                <% } %>
+              </div>
+            <% } %>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+              <div>
+                <a href="/my-warps" class="btn btn-outline-primary">
+                  <i class="fas fa-list-ul me-2"></i>My Warps
+                </a>
+                <a href="/warp-stats" class="btn btn-outline-info ms-2">
+                  <i class="fas fa-chart-bar me-2"></i>Statistics
+                </a>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                <label class="form-check-label" for="darkModeSwitch">
+                  <i class="fas fa-moon me-2"></i>Dark Mode
+                </label>
+              </div>
+            </div>
+
+            <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="generate-tab" data-bs-toggle="tab" data-bs-target="#generate" type="button" role="tab" aria-controls="generate" aria-selected="true">
+                  <i class="fas fa-magic me-2"></i>Generate Warp
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contract-tab" data-bs-toggle="tab" data-bs-target="#contract-form" type="button" role="tab" aria-controls="contract-form" aria-selected="false">
+                  <i class="fas fa-file-contract me-2"></i>Direct Contract
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" href="/batch-create">
+                  <i class="fas fa-layer-group me-2"></i>Batch Create
+                </a>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+              <!-- Generate Warp Tab -->
+              <div class="tab-pane fade show active" id="generate" role="tabpanel" aria-labelledby="generate-tab">
+                <form action="/generate" method="POST">
+                  <div class="mb-3">
+                    <label for="prompt" class="form-label">
+                      <i class="fas fa-keyboard me-2"></i>Enter your prompt:
+                    </label>
+                    <textarea class="form-control" id="prompt" name="prompt" rows="3" placeholder="Example: Stake 10 EGLD with validator erd123..." required></textarea>
+                  </div>
+                  
+                  <div class="mb-4">
+                    <p class="mb-2"><i class="fas fa-lightbulb me-2"></i>Example prompts:</p>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <div class="example-prompt" data-prompt="Stake 10 EGLD with validator erd1qqqqqqqqqqqqqpgqd9rvv2n378e27jcts8vfwynpkm8ng7g7945s2ey76d">
+                          <i class="fas fa-angle-right me-2"></i>Stake 10 EGLD
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <div class="example-prompt" data-prompt="Swap 1 EGLD for USDC at the best rate">
+                          <i class="fas fa-angle-right me-2"></i>Swap 1 EGLD for USDC
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <div class="example-prompt" data-prompt="Borrow 500 USDC with 2 EGLD as collateral">
+                          <i class="fas fa-angle-right me-2"></i>Borrow 500 USDC
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <div class="example-prompt" data-prompt="Mint an NFT for 0.5 EGLD from collection X">
+                          <i class="fas fa-angle-right me-2"></i>Mint an NFT
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="alias" class="form-label">
+                      <i class="fas fa-tag me-2"></i>Alias (optional):
+                    </label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="alias" name="alias" placeholder="Enter a memorable name for your Warp">
+                      <button class="btn btn-outline-secondary" type="button" id="checkAliasBtn">
+                        <i class="fas fa-check-circle me-2"></i>Check Availability
+                      </button>
+                    </div>
+                    <div id="aliasAvailabilityResult" class="form-text mt-2"></div>
+                  </div>
+                  
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="customStyleCheck">
+                    <label class="form-check-label" for="customStyleCheck">
+                      <i class="fas fa-paint-brush me-2"></i>Add custom styling
+                    </label>
+                  </div>
+                  
+                  <div id="stylingOptions" class="row mb-3" style="display: none;">
+                    <div class="col-md-6">
+                      <label for="primaryColor" class="form-label">Primary Color:</label>
+                      <input type="color" class="form-control form-control-color" id="primaryColor" name="primaryColor" value="#4161FF">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="secondaryColor" class="form-label">Secondary Color:</label>
+                      <input type="color" class="form-control form-control-color" id="secondaryColor" name="secondaryColor" value="#8A6FFF">
+                    </div>
+                  </div>
+                  
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      <i class="fas fa-bolt me-2"></i>Generate Warp
+                    </button>
+                  </div>
+                </form>
+              </div>
+              
+              <!-- Direct Contract Interaction Tab -->
+              <div class="tab-pane fade" id="contract-form" role="tabpanel" aria-labelledby="contract-tab">
+                <form action="/create-contract-warp" method="POST">
+                  <div class="mb-3">
+                    <label for="contractAddress" class="form-label">Contract Address:</label>
+                    <input type="text" class="form-control" id="contractAddress" name="contractAddress" placeholder="erd1qqqqqqqqqqqqqpgqxwakt2g7u9atsnr03gqcgmhcv38pt7mkd94q6shuwt" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="functionName" class="form-label">Function Name:</label>
+                    <input type="text" class="form-control" id="functionName" name="functionName" placeholder="e.g., swap, stake, delegate" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="args" class="form-label">Arguments (comma separated):</label>
+                    <input type="text" class="form-control" id="args" name="args" placeholder="e.g., EGLD,USDC,1000000000000000000">
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="value" class="form-label">EGLD Value:</label>
+                      <input type="text" class="form-control" id="value" name="value" placeholder="e.g., 0.1">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="gasLimit" class="form-label">Gas Limit:</label>
+                      <input type="text" class="form-control" id="gasLimit" name="gasLimit" placeholder="e.g., 10000000">
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="contractAlias" class="form-label">Alias (optional):</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="contractAlias" name="alias" placeholder="Enter a memorable name for your Warp">
+                      <button class="btn btn-outline-secondary" type="button" id="checkContractAliasBtn">Check Availability</button>
+                    </div>
+                    <div id="contractAliasAvailabilityResult" class="form-text"></div>
+                  </div>
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Create Contract Warp</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <% if (result) { %>
+              <div id="resultContainer" class="mt-4 fade-in">
+                <div class="alert alert-success">
+                  <h4 class="alert-heading"><i class="fas fa-check-circle me-2"></i>Warp Created Successfully!</h4>
+                  <p>Your warp has been created and registered on the MultiversX blockchain.</p>
+                </div>
+                
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-link me-2"></i>Warp Details</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <h5>Shareable Link:</h5>
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" value="<%= result.warpLink %>" readonly id="warpLink">
+                          <button class="btn btn-outline-primary copy-btn" type="button" data-copy-target="warpLink">
+                            <i class="fas fa-copy me-2"></i>Copy
+                          </button>
+                        </div>
+                        
+                        <h5>Transaction Hash:</h5>
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" value="<%= result.txHash %>" readonly id="txHash">
+                          <button class="btn btn-outline-primary copy-btn" type="button" data-copy-target="txHash">
+                            <i class="fas fa-copy me-2"></i>Copy
+                          </button>
+                        </div>
+                        
+                        <% if (result.alias) { %>
+                          <h5>Alias:</h5>
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" value="<%= result.alias %>" readonly id="alias">
+                            <button class="btn btn-outline-primary copy-btn" type="button" data-copy-target="alias">
+                              <i class="fas fa-copy me-2"></i>Copy
+                            </button>
+                          </div>
+                        <% } %>
+                        
+                        <h5>Prompt:</h5>
+                        <p class="mb-3"><%= result.prompt %></p>
+                        
+                        <div class="d-flex gap-2">
+                          <a href="<%= result.explorerLink %>" target="_blank" class="btn btn-outline-primary">
+                            <i class="fas fa-external-link-alt me-2"></i>View on Explorer
+                          </a>
+                          <a href="<%= result.warpLink %>" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt me-2"></i>Open Warp
+                          </a>
+                          <a href="/warp-analytics/<%= result.alias || 'hash:' + result.txHash %>" class="btn btn-outline-info">
+                            <i class="fas fa-chart-line me-2"></i>Analytics
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="qr-code-container text-center">
+                          <h5 class="mb-3"><i class="fas fa-qrcode me-2"></i>Scan QR Code</h5>
+                          <div id="qrcode" class="d-inline-block mb-2"></div>
+                          <p class="mt-2 mb-0">Scan to access your warp</p>
+                          <!-- QR code copy button will be added here by JavaScript -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                  <a href="/" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-2"></i>Create Another Warp
+                  </a>
+                  <a href="/my-warps" class="btn btn-outline-primary">
+                    <i class="fas fa-list-ul me-2"></i>View All My Warps
+                  </a>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Generate QR code if result exists
+      const resultContainer = document.getElementById('resultContainer');
+      if (resultContainer) {
+        const warpLink = document.getElementById('warpLink').value;
+        const qrcodeContainer = document.getElementById('qrcode');
+        
+        if (qrcodeContainer && warpLink) {
+          // Clear previous QR code if any
+          qrcodeContainer.innerHTML = '';
+          
+          try {
+            // Generate new QR code with better visibility
+            new QRCode(qrcodeContainer, {
+              text: warpLink,
+              width: 200,
+              height: 200,
+              colorDark: "#000000",
+              colorLight: "#ffffff",
+              correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            // Ensure QR code is visible by adding a border
+            const qrImage = qrcodeContainer.querySelector('img');
+            if (qrImage) {
+              qrImage.style.border = '1px solid #ddd';
+              qrImage.style.borderRadius = '4px';
+              qrImage.style.display = 'block';
+              qrImage.style.margin = '0 auto';
+              qrImage.style.maxWidth = '100%';
+              qrImage.style.height = 'auto';
+            }
+            
+            console.log('QR code generated successfully');
+          } catch (error) {
+            console.error('Error generating QR code:', error);
+            // Fallback method if the QR code library fails
+            qrcodeContainer.innerHTML = `
+              <div style="padding: 10px; background-color: white; border-radius: 8px; display: inline-block;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(warpLink)}" 
+                     alt="QR Code" style="display: block; max-width: 100%; height: auto;" />
+              </div>
+            `;
+          }
+          
+          // Add a copy button for the QR code
+          const qrCopyBtn = document.createElement('button');
+          qrCopyBtn.className = 'btn btn-sm btn-outline-primary mt-2';
+          qrCopyBtn.innerHTML = '<i class="fas fa-copy me-2"></i>Copy Link';
+          qrCopyBtn.setAttribute('data-copy-target', 'warpLink');
+          qrCopyBtn.onclick = function() {
+            navigator.clipboard.writeText(warpLink)
+              .then(() => {
+                this.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
+                setTimeout(() => {
+                  this.innerHTML = '<i class="fas fa-copy me-2"></i>Copy Link';
+                }, 2000);
+              });
+          };
+          
+          // Add the button after the QR code container
+          qrcodeContainer.parentNode.appendChild(qrCopyBtn);
+        }
+        
+        // Store warp in local storage
+        const txHash = document.getElementById('txHash')?.value;
+        const alias = document.getElementById('alias')?.value;
+        const prompt = document.querySelector('textarea[name="prompt"]')?.value;
+        
+        if (txHash && warpLink) {
+          const warpData = {
+            txHash,
+            warpLink,
+            alias: alias || null,
+            prompt: prompt || 'Custom Warp',
+            createdAt: new Date().toISOString()
+          };
+          
+          // Save to local storage using the function from main.js
+          if (window.warpStorage && typeof window.warpStorage.saveWarp === 'function') {
+            window.warpStorage.saveWarp(warpData);
+          }
+        }
+      }
+
+      // Custom style checkbox
+      const customStyleCheck = document.getElementById('customStyleCheck');
+      const stylingOptions = document.getElementById('stylingOptions');
+      
+      if (customStyleCheck && stylingOptions) {
+        customStyleCheck.addEventListener('change', function() {
+          stylingOptions.style.display = this.checked ? 'flex' : 'none';
+        });
+      }
+
+      // Check alias availability
+      const checkAliasBtn = document.getElementById('checkAliasBtn');
+      const aliasInput = document.getElementById('alias');
+      const aliasAvailabilityResult = document.getElementById('aliasAvailabilityResult');
+      
+      if (checkAliasBtn && aliasInput && aliasAvailabilityResult) {
+        checkAliasBtn.addEventListener('click', function() {
+          const alias = aliasInput.value.trim();
+          if (!alias) {
+            aliasAvailabilityResult.innerHTML = '<span class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Please enter an alias</span>';
+            return;
+          }
+          
+          aliasAvailabilityResult.innerHTML = '<span class="text-info"><i class="fas fa-spinner fa-spin me-2"></i>Checking...</span>';
+          
+          fetch(`/check-alias?alias=${encodeURIComponent(alias)}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.available) {
+                aliasAvailabilityResult.innerHTML = '<span class="text-success"><i class="fas fa-check-circle me-2"></i>Alias is available!</span>';
+              } else {
+                aliasAvailabilityResult.innerHTML = '<span class="text-danger"><i class="fas fa-times-circle me-2"></i>Alias is already taken</span>';
+              }
+            })
+            .catch(error => {
+              console.error('Error checking alias:', error);
+              aliasAvailabilityResult.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-circle me-2"></i>Error checking alias</span>';
+            });
+        });
+      }
+    });
+  </script>
+
+  <style>
+    /* QR Code Styling */
+    .qr-code-container {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+      display: inline-block;
+      text-align: center;
+      overflow: visible;
+      max-width: 100%;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      margin-top: 10px;
+    }
+
+    .qr-code-container:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    #qrcode {
+      padding: 10px;
+      background-color: white;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 0 auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #qrcode img {
+      display: block !important;
+      max-width: 100% !important;
+      height: auto !important;
+      margin: 0 auto !important;
+      border: none !important;
+    }
+    
+    body.light-mode .qr-code-container {
+      background-color: rgba(0, 0, 0, 0.05);
+      border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    /* QR Code text */
+    .qr-code-container h5 {
+      color: white;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    body.light-mode .qr-code-container h5 {
+      color: #333;
+    }
+    
+    .qr-code-container p {
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    body.light-mode .qr-code-container p {
+      color: #555;
+    }
+  </style>
+</body>
+</html> 

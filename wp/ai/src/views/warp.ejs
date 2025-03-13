@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= warp.title %> | MultiversX Warp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header {
+      padding: 1.5rem 2rem;
+      background: rgba(15, 22, 36, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    
+    .logo span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .main-container {
+      flex: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .warp-card {
+      background: rgba(26, 26, 46, 0.7);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .warp-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .warp-description {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .action-card {
+      background: rgba(15, 22, 36, 0.7);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      border-color: rgba(65, 97, 255, 0.3);
+    }
+    
+    .action-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(65, 97, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .action-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .action-description {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .action-details {
+      background: rgba(8, 12, 22, 0.6);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .action-detail {
+      display: flex;
+      margin-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      width: 150px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    
+    .detail-value {
+      flex: 1;
+      word-break: break-all;
+    }
+    
+    .code {
+      font-family: monospace;
+      background: rgba(8, 12, 22, 0.8);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .action-button {
+      display: inline-block;
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 600;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .action-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(65, 97, 255, 0.3);
+    }
+    
+    .link-button {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .link-button:hover {
+      background: rgba(65, 97, 255, 0.1);
+      color: var(--primary);
+    }
+    
+    .footer {
+      margin-top: auto;
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .toast.success {
+      background: linear-gradient(135deg, var(--success), var(--success-light));
+    }
+    
+    .toast.error {
+      background: linear-gradient(135deg, var(--error), var(--error-light));
+    }
+    
+    .toast.warning {
+      background: linear-gradient(135deg, var(--warning), var(--warning-light));
+    }
+    
+    .toast.info {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+    
+    .toast-icon {
+      margin-right: 0.8rem;
+      font-size: 1.2rem;
+    }
+    
+    .loading-indicator {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(15, 22, 36, 0.8);
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+    
+    .loading-text {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">
+        <span>WarpX</span> | MultiversX Warp
+      </div>
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="warp-card">
+      <h1 class="warp-title"><%= warp.title %></h1>
+      <% if (warp.description) { %>
+        <p class="warp-description"><%= warp.description %></p>
+      <% } %>
+      
+      <% warp.actions.forEach(function(action, index) { %>
+        <div class="action-card">
+          <div class="action-header">
+            <div class="action-icon">
+              <% if (action.type === 'contract') { %>
+                🔄
+              <% } else if (action.type === 'transfer') { %>
+                💸
+              <% } else if (action.type === 'nft') { %>
+                🖼️
+              <% } else if (action.type === 'link') { %>
+                🔗
+              <% } else { %>
+                ⚡
+              <% } %>
+            </div>
+            <h2 class="action-title"><%= action.label %></h2>
+          </div>
+          
+          <% if (action.description) { %>
+            <p class="action-description"><%= action.description %></p>
+          <% } %>
+          
+          <div class="action-details">
+            <% if (action.type === 'contract') { %>
+              <div class="action-detail">
+                <div class="detail-label">Contract:</div>
+                <div class="detail-value"><span class="code"><%= action.address %></span></div>
+              </div>
+              <div class="action-detail">
+                <div class="detail-label">Function:</div>
+                <div class="detail-value"><span class="code"><%= action.func %></span></div>
+              </div>
+              <% if (action.value && action.value !== '0') { %>
+                <div class="action-detail">
+                  <div class="detail-label">Value:</div>
+                  <div class="detail-value"><%= action.value %> EGLD</div>
+                </div>
+              <% } %>
+              <% if (action.args && action.args.length > 0) { %>
+                <div class="action-detail">
+                  <div class="detail-label">Arguments:</div>
+                  <div class="detail-value">
+                    <% action.args.forEach(function(arg) { %>
+                      <span class="code"><%= arg %></span><br>
+                    <% }); %>
+                  </div>
+                </div>
+              <% } %>
+            <% } else if (action.type === 'transfer') { %>
+              <div class="action-detail">
+                <div class="detail-label">Recipient:</div>
+                <div class="detail-value"><span class="code"><%= action.destination %></span></div>
+              </div>
+              <div class="action-detail">
+                <div class="detail-label">Amount:</div>
+                <div class="detail-value"><%= action.value %> EGLD</div>
+              </div>
+            <% } else if (action.type === 'nft') { %>
+              <div class="action-detail">
+                <div class="detail-label">Token:</div>
+                <div class="detail-value"><span class="code"><%= action.token %></span></div>
+              </div>
+              <div class="action-detail">
+                <div class="detail-label">Nonce:</div>
+                <div class="detail-value"><span class="code"><%= action.nonce %></span></div>
+              </div>
+              <div class="action-detail">
+                <div class="detail-label">Quantity:</div>
+                <div class="detail-value"><%= action.quantity || '1' %></div>
+              </div>
+              <div class="action-detail">
+                <div class="detail-label">Recipient:</div>
+                <div class="detail-value"><span class="code"><%= action.destination %></span></div>
+              </div>
+            <% } else if (action.type === 'link') { %>
+              <div class="action-detail">
+                <div class="detail-label">URL:</div>
+                <div class="detail-value"><a href="<%= action.url %>" target="_blank"><%= action.url %></a></div>
+              </div>
+            <% } %>
+          </div>
+          
+          <% if (action.type === 'link') { %>
+            <a href="<%= action.url %>" target="_blank" class="action-button link-button">Open Link</a>
+          <% } else { %>
+            <button class="action-button execute-action" data-index="<%= index %>">Execute</button>
+          <% } %>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>© <%= new Date().getFullYear() %> WarpX | MultiversX Warp | Built for the MultiversX Hackathon</p>
+  </div>
+  
+  <div id="toast" class="toast"></div>
+  
+  <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+    <div class="spinner"></div>
+    <div class="loading-text">Executing transaction...</div>
+  </div>
+  
+  <script src="https://unpkg.com/@multiversx/sdk-web-wallet@3.2.0/dist/sdk.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const executeButtons = document.querySelectorAll('.execute-action');
+      executeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const actionIndex = parseInt(this.getAttribute('data-index'));
+          executeAction(actionIndex);
+        });
+      });
+    });
+    
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      let icon = '';
+      
+      switch(type) {
+        case 'success':
+          icon = '✅';
+          break;
+        case 'error':
+          icon = '❌';
+          break;
+        case 'warning':
+          icon = '⚠️';
+          break;
+        case 'info':
+          icon = 'ℹ️';
+          break;
+      }
+      
+      toast.innerHTML = `<span class="toast-icon">${icon}</span> ${message}`;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+      }, 5000);
+    }
+    
+    function executeAction(index) {
+      const warpData = <%- JSON.stringify(warp) %>;
+      const action = warpData.actions[index];
+      
+      document.getElementById('loadingIndicator').style.display = 'flex';
+      
+      if (action.type === 'contract' || action.type === 'transfer' || action.type === 'nft') {
+        const callbackUrl = window.location.origin + '/transaction-callback';
+        
+        // Create transaction object based on action type
+        let tx;
+        if (action.type === 'contract') {
+          tx = {
+            type: 'contract',
+            address: action.address,
+            function: action.func,
+            args: action.args || [],
+            value: action.value || '0',
+            gasLimit: action.gasLimit || 50000000
+          };
+        } else if (action.type === 'transfer') {
+          tx = {
+            type: 'transfer',
+            receiver: action.destination,
+            value: action.value || '0',
+            gasLimit: 50000
+          };
+        } else if (action.type === 'nft') {
+          tx = {
+            type: 'nft',
+            token: action.token,
+            nonce: action.nonce,
+            quantity: action.quantity || '1',
+            receiver: action.destination,
+            gasLimit: 500000
+          };
+        }
+        
+        // Initialize web wallet provider
+        const provider = new MultiversxSDK.ProxyProvider("https://devnet-gateway.multiversx.com");
+        const webWalletInstance = new MultiversxSDK.WebWalletProvider(provider);
+        
+        // Send transaction to web wallet
+        webWalletInstance.signTransaction(tx, callbackUrl)
+          .catch(err => {
+            document.getElementById('loadingIndicator').style.display = 'none';
+            showToast('Error: ' + (err.message || 'Could not process transaction'), 'error');
+            console.error(err);
+          });
+      } else {
+        document.getElementById('loadingIndicator').style.display = 'none';
+        showToast('Unsupported action type', 'error');
+      }
+    }
+  </script>
+</body>
+</html> 

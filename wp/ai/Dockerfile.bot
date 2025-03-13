@@ -1,0 +1,20 @@
+FROM node:18-alpine
+
+# Create app directory
+WORKDIR /app
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Create temp directory for QR codes
+RUN mkdir -p src/temp && chmod 777 src/temp
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Run the bot
+CMD ["npm", "run", "bot"] 

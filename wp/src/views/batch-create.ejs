@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Warp Creation</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Particles background -->
+  <div class="particles-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card shadow">
+          <div class="card-header">
+            <h1 class="text-center">Batch Warp Creation</h1>
+            <p class="text-center mb-0">Create multiple warps at once</p>
+          </div>
+          <div class="card-body">
+            <% if (error) { %>
+              <div class="alert alert-danger fade-in">
+                <strong><i class="fas fa-exclamation-circle me-2"></i>Error:</strong> <%= error %>
+              </div>
+            <% } %>
+            
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+              <div>
+                <a href="/" class="btn btn-outline-primary">
+                  <i class="fas fa-arrow-left me-2"></i>Back to Generator
+                </a>
+                <a href="/my-warps" class="btn btn-outline-info ms-2">
+                  <i class="fas fa-list-ul me-2"></i>My Warps
+                </a>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                <label class="form-check-label" for="darkModeSwitch">
+                  <i class="fas fa-moon me-2"></i>Dark Mode
+                </label>
+              </div>
+            </div>
+            
+            <div class="card mb-4">
+              <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-layer-group me-2"></i>Create Multiple Warps</h3>
+              </div>
+              <div class="card-body">
+                <p class="mb-3">Enter one prompt per line to create multiple warps at once. Each prompt will generate a separate warp.</p>
+                
+                <div class="form-group mb-3">
+                  <label for="batchPrompts" class="form-label">Batch Prompts</label>
+                  <textarea class="form-control" id="batchPrompts" rows="8" placeholder="Enter one prompt per line, e.g.:&#10;Send 5 EGLD to alice.elrond&#10;Stake 10 EGLD with validator erd1...&#10;Buy 100 MEX&#10;Swap 2 EGLD for USDC"></textarea>
+                </div>
+                
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" id="generateAliases" checked>
+                  <label class="form-check-label" for="generateAliases">
+                    Auto-generate aliases for each warp
+                  </label>
+                </div>
+                
+                <div class="d-grid">
+                  <button id="createBatchBtn" class="btn btn-primary btn-lg">
+                    <i class="fas fa-magic me-2"></i>Create Batch Warps
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div id="batchResults" class="d-none">
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h3 class="mb-0"><i class="fas fa-check-circle me-2"></i>Batch Results</h3>
+                </div>
+                <div class="card-body">
+                  <div id="successResults"></div>
+                  <div id="failedResults"></div>
+                </div>
+              </div>
+              
+              <div class="d-grid gap-2">
+                <a href="/batch-create" class="btn btn-primary">
+                  <i class="fas fa-plus-circle me-2"></i>Create Another Batch
+                </a>
+                <a href="/my-warps" class="btn btn-outline-primary">
+                  <i class="fas fa-list-ul me-2"></i>View All My Warps
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-center">
+            <p class="mb-0">MultiversX AI Warp Generator</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const createBatchBtn = document.getElementById('createBatchBtn');
+      const batchPromptsTextarea = document.getElementById('batchPrompts');
+      const generateAliasesCheckbox = document.getElementById('generateAliases');
+      const batchResults = document.getElementById('batchResults');
+      const successResults = document.getElementById('successResults');
+      const failedResults = document.getElementById('failedResults');
+      
+      if (createBatchBtn) {
+        createBatchBtn.addEventListener('click', async function() {
+          const batchPrompts = batchPromptsTextarea.value.trim();
+          const generateAliases = generateAliasesCheckbox.checked;
+          
+          if (!batchPrompts) {
+            showAlert('Please enter at least one prompt', 'danger');
+            return;
+          }
+          
+          const prompts = batchPrompts.split('\n').filter(p => p.trim());
+          
+          if (prompts.length === 0) {
+            showAlert('Please enter at least one valid prompt', 'danger');
+            return;
+          }
+          
+          // Show loading state
+          this.disabled = true;
+          this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating batch...';
+          
+          const results = [];
+          const failedPrompts = [];
+          
+          // Process each prompt sequentially with delay between requests
+          for (let i = 0; i < prompts.length; i++) {
+            const prompt = prompts[i];
+            try {
+              // Show progress
+              this.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating warp ${i+1}/${prompts.length}...`;
+              
+              // Generate a simple alias if needed
+              let alias = '';
+              if (generateAliases) {
+                // Extract a potential alias from the prompt or generate one
+                const words = prompt.split(' ').filter(w => w.length > 3 && !['send', 'with', 'from', 'stake', 'delegate'].includes(w.toLowerCase()));
+                alias = words.length > 0 ? 
+                  words[0].toLowerCase().replace(/[^a-z0-9]/g, '') + Math.floor(Math.random() * 1000) : 
+                  'warp' + Math.floor(Math.random() * 10000);
+              }
+              
+              // Add a delay between requests to avoid nonce conflicts
+              if (i > 0) {
+                await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay between requests
+              }
+              
+              // Create the warp
+              const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  prompt: prompt,
+                  alias: alias
+                })
+              });
+              
+              const result = await response.json();
+              
+              if (result.success) {
+                // Ensure the warpLink is properly formatted with the transaction hash
+                let warpLink = result.warpLink;
+                
+                // If warpLink doesn't contain hash%3A, fix it
+                if (result.txHash && (!warpLink || !warpLink.includes('hash%3A'))) {
+                  warpLink = `https://devnet.usewarp.to/hash%3A${result.txHash}`;
+                }
+                
+                results.push({
+                  prompt: prompt,
+                  txHash: result.txHash,
+                  warpLink: warpLink,
+                  alias: result.alias || '',
+                  explorerLink: result.explorerLink
+                });
+                
+                // Store in local storage
+                if (window.warpStorage) {
+                  window.warpStorage.saveWarp({
+                    txHash: result.txHash,
+                    warpLink: warpLink,
+                    alias: result.alias || '',
+                    prompt: prompt,
+                    savedAt: new Date().toISOString()
+                  });
+                }
+                
+                // Show success message for this warp
+                showAlert(`Successfully created warp ${i+1}: ${prompt.substring(0, 30)}...`, 'success', 2000);
+              } else {
+                failedPrompts.push({ prompt, error: result.error || 'Unknown error' });
+                // Show error message for this warp
+                showAlert(`Failed to create warp ${i+1}: ${result.error || 'Unknown error'}`, 'danger', 3000);
+              }
+            } catch (error) {
+              failedPrompts.push({ prompt, error: error.message || 'Network error' });
+              // Show error message for this warp
+              showAlert(`Error creating warp ${i+1}: ${error.message || 'Network error'}`, 'danger', 3000);
+            }
+          }
+          
+          // Reset button state
+          this.disabled = false;
+          this.innerHTML = '<i class="fas fa-magic me-2"></i>Create Batch Warps';
+          
+          // Show results
+          batchResults.classList.remove('d-none');
+          
+          if (results.length > 0) {
+            let successHTML = `
+              <div class="alert alert-success">
+                <h4 class="alert-heading"><i class="fas fa-check-circle me-2"></i>Success!</h4>
+                <p>Successfully created ${results.length} warp${results.length > 1 ? 's' : ''}.</p>
+              </div>
+              <div class="warp-list">
+            `;
+            
+            results.forEach(result => {
+              successHTML += `
+                <div class="warp-card fade-in">
+                  <div class="warp-card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span><i class="fas fa-${result.alias ? 'tag' : 'hashtag'} me-2"></i>${result.alias || 'No Alias'}</span>
+                      <span class="warp-status warp-status-success">Success</span>
+                    </div>
+                  </div>
+                  <div class="warp-card-body">
+                    <p class="mb-1"><strong>Prompt:</strong></p>
+                    <p class="mb-3">${result.prompt}</p>
+                    
+                    <p class="mb-2"><strong>Transaction:</strong></p>
+                    <code class="d-block mb-3 small">${result.txHash}</code>
+                    
+                    <p class="mb-1"><strong>Created:</strong></p>
+                    <p class="mb-0">
+                      <i class="fas fa-calendar-alt me-2"></i>${new Date().toLocaleString()}
+                    </p>
+                  </div>
+                  <div class="warp-card-footer">
+                    <a href="${result.warpLink}" target="_blank" class="btn btn-sm btn-primary">
+                      <i class="fas fa-external-link-alt me-1"></i>View
+                    </a>
+                    <a href="${result.explorerLink}" target="_blank" class="btn btn-sm btn-secondary">
+                      <i class="fas fa-search me-1"></i>Explorer
+                    </a>
+                    <button class="btn btn-sm btn-outline-info copy-btn" data-copy="${result.warpLink}">
+                      <i class="fas fa-copy me-1"></i>Copy Link
+                    </button>
+                  </div>
+                </div>
+              `;
+            });
+            
+            successHTML += `</div>`;
+            successResults.innerHTML = successHTML;
+          } else {
+            successResults.innerHTML = '';
+          }
+          
+          if (failedPrompts.length > 0) {
+            let failedHTML = `
+              <div class="alert alert-danger mt-4">
+                <h4 class="alert-heading"><i class="fas fa-exclamation-circle me-2"></i>Errors</h4>
+                <p>Failed to create ${failedPrompts.length} warp${failedPrompts.length > 1 ? 's' : ''}.</p>
+              </div>
+              <div class="list-group">
+            `;
+            
+            failedPrompts.forEach(item => {
+              failedHTML += `
+                <div class="list-group-item list-group-item-danger">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Failed Prompt</h5>
+                  </div>
+                  <p class="mb-1"><strong>Prompt:</strong> ${item.prompt}</p>
+                  <small><strong>Error:</strong> ${item.error}</small>
+                </div>
+              `;
+            });
+            
+            failedHTML += `</div>`;
+            failedResults.innerHTML = failedHTML;
+          } else {
+            failedResults.innerHTML = '';
+          }
+          
+          // Scroll to results
+          batchResults.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+      
+      function showAlert(message, type, duration = 5000) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+          <strong>${type === 'danger' ? 'Error' : 'Success'}:</strong> ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        const cardBody = document.querySelector('.card-body');
+        cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        
+        setTimeout(() => {
+          alertDiv.classList.remove('show');
+          setTimeout(() => alertDiv.remove(), 300);
+        }, duration);
+      }
+    });
+  </script>
+</body>
+</html> 

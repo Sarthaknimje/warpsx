@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h1 class="text-center">My Warps</h1>
+            <p class="text-center mb-0">Manage your MultiversX Warps</p>
+          </div>
+          <div class="card-body">
+            <% if (error) { %>
+              <div class="alert alert-danger">
+                <strong>Error:</strong> <%= error %>
+              </div>
+            <% } %>
+            
+            <div class="mb-4">
+              <a href="/" class="btn btn-outline-primary">← Back to Generator</a>
+              <a href="/warp-stats" class="btn btn-outline-info float-end">View Warp Statistics</a>
+            </div>
+            
+            <div class="card mb-4">
+              <div class="card-header bg-info text-white">
+                <h3 class="mb-0">Your Wallet</h3>
+              </div>
+              <div class="card-body">
+                <p><strong>Address:</strong> <code><%= address %></code></p>
+                <p><a href="https://devnet-explorer.multiversx.com/accounts/<%= address %>" target="_blank" class="btn btn-sm btn-outline-primary">View on Explorer</a></p>
+              </div>
+            </div>
+            
+            <% if (warps.length === 0) { %>
+              <div class="alert alert-info">
+                <p class="mb-0">You haven't created any warps yet. <a href="/">Create your first warp</a>!</p>
+              </div>
+            <% } else { %>
+              <h3 class="mb-3">Your Warps (<%= warps.length %>)</h3>
+              
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>Alias</th>
+                      <th>Transaction Hash</th>
+                      <th>Created</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% warps.forEach(warp => { %>
+                      <tr>
+                        <td>
+                          <% if (warp.alias) { %>
+                            <span class="badge bg-success"><%= warp.alias %></span>
+                          <% } else { %>
+                            <span class="text-muted">No alias</span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <code class="small"><%= warp.txHash.substring(0, 10) %>...</code>
+                          <a href="https://devnet-explorer.multiversx.com/transactions/<%= warp.txHash %>" target="_blank" class="btn btn-sm btn-outline-secondary ms-2">
+                            <small>Explorer</small>
+                          </a>
+                        </td>
+                        <td>
+                          <% if (warp.deploymentTime) { %>
+                            <%= new Date(warp.deploymentTime).toLocaleString() %>
+                          <% } else { %>
+                            <span class="text-muted">Unknown</span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <% if (warp.status === 'success') { %>
+                            <span class="badge bg-success">Success</span>
+                          <% } else if (warp.status === 'pending') { %>
+                            <span class="badge bg-warning">Pending</span>
+                          <% } else if (warp.error) { %>
+                            <span class="badge bg-danger">Error</span>
+                          <% } else { %>
+                            <span class="badge bg-secondary"><%= warp.status || 'Unknown' %></span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <div class="btn-group btn-group-sm">
+                            <a href="<%= warp.link %>" target="_blank" class="btn btn-primary">View</a>
+                            <a href="/warp-analytics/<%= warp.alias || 'hash:' + warp.txHash %>" class="btn btn-info">Analytics</a>
+                            <% if (warp.alias) { %>
+                              <button 
+                                class="btn btn-danger delete-alias" 
+                                data-alias="<%= warp.alias %>"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#deleteModal">
+                                Delete
+                              </button>
+                            <% } %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+            
+            <div class="mt-4">
+              <a href="/" class="btn btn-primary">Create New Warp</a>
+            </div>
+          </div>
+          <div class="card-footer text-center">
+            <p>MultiversX AI Warp Generator</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the alias <strong id="deleteAliasName"></strong>?</p>
+          <p class="text-danger">This action cannot be undone. The warp will still exist but will no longer be accessible via the alias.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Delete alias functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const deleteButtons = document.querySelectorAll('.delete-alias');
+      const confirmDeleteButton = document.getElementById('confirmDelete');
+      const deleteAliasNameElement = document.getElementById('deleteAliasName');
+      let currentAlias = '';
+      
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          currentAlias = this.dataset.alias;
+          deleteAliasNameElement.textContent = currentAlias;
+        });
+      });
+      
+      confirmDeleteButton.addEventListener('click', async function() {
+        if (!currentAlias) return;
+        
+        try {
+          confirmDeleteButton.disabled = true;
+          confirmDeleteButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...';
+          
+          const response = await fetch('/delete-warp', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ alias: currentAlias })
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Close the modal
+            bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+              <strong>Success!</strong> ${result.message}
+              <a href="${result.explorerLink}" target="_blank" class="ms-2">View transaction</a>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.querySelector('.card-body').prepend(alertDiv);
+            
+            // Remove the row or update the UI
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
+          } else {
+            throw new Error(result.error || 'Failed to delete alias');
+          }
+        } catch (error) {
+          console.error('Error deleting alias:', error);
+          
+          // Show error message
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+          alertDiv.innerHTML = `
+            <strong>Error!</strong> ${error.message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          `;
+          document.querySelector('.card-body').prepend(alertDiv);
+          
+          // Close the modal
+          bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+        } finally {
+          confirmDeleteButton.disabled = false;
+          confirmDeleteButton.textContent = 'Delete';
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

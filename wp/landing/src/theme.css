@@ -1,0 +1,334 @@
+/**
+ * WarpX Theme - Shared CSS for both Landing Page and Main App
+ * This file contains all the main theme variables and styles
+ */
+
+:root {
+  --primary: #4161FF;
+  --primary-light: #6A83FF;
+  --primary-dark: #2A45D8;
+  --secondary: #00CCFF;
+  --secondary-light: #35E0FF;
+  --secondary-dark: #0099CC;
+  --accent: #FF5CAA;
+  --accent-light: #FF80BC;
+  --accent-dark: #E13A8A;
+  --dark: #1A1A2E;
+  --dark-blue: #0F1624;
+  --dark-card: #1F2937;
+  --text-primary: #FFFFFF;
+  --text-secondary: #C2C2C2;
+  --success: #00C853;
+  --success-light: #69F0AE;
+  --warning: #FFD600;
+  --warning-light: #FFEA00;
+  --error: #FF5252;
+  --error-light: #FF8A80;
+  --gradient-primary: linear-gradient(90deg, var(--primary), var(--secondary));
+  --gradient-accent: linear-gradient(90deg, var(--accent), var(--primary));
+  --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --box-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.2);
+  --transition: all 0.3s ease;
+  --border-radius: 8px;
+  --border-radius-lg: 16px;
+  --font-family-main: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-heading: 'Space Grotesk', sans-serif;
+  --font-family-mono: 'Space Grotesk', monospace;
+}
+
+/* Base elements styling */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--dark-blue);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  margin: 0;
+  line-height: 1.3;
+}
+
+p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+button, .button {
+  cursor: pointer;
+  font-family: var(--font-family-main);
+  border: none;
+  outline: none;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover, .button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(65, 97, 255, 0.3);
+}
+
+code {
+  font-family: var(--font-family-mono);
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Utility classes */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 100px 0;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-dark {
+  background-color: var(--dark-blue);
+}
+
+.bg-card {
+  background-color: var(--dark-card);
+}
+
+.card {
+  background: rgba(26, 26, 46, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.m-4 {
+  margin: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.bounce {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Button variations */
+.button-primary {
+  background: var(--gradient-primary);
+}
+
+.button-secondary {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--text-primary);
+}
+
+.button-secondary:hover {
+  background: rgba(65, 97, 255, 0.1);
+}
+
+.button-accent {
+  background: var(--gradient-accent);
+}
+
+.button-success {
+  background: linear-gradient(90deg, var(--success), var(--success-light));
+}
+
+.button-warning {
+  background: linear-gradient(90deg, var(--warning), var(--warning-light));
+}
+
+.button-error {
+  background: linear-gradient(90deg, var(--error), var(--error-light));
+}
+
+/* Form elements */
+input, textarea, select {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 22, 36, 0.7);
+  color: var(--text-primary);
+  font-family: var(--font-family-main);
+  transition: var(--transition);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(65, 97, 255, 0.2);
+}
+
+::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .section {
+    padding: 80px 0;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0;
+  }
+  
+  .card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 40px 0;
+  }
+  
+  .card {
+    padding: 16px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.7rem;
+  }
+} 

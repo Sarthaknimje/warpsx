@@ -1,0 +1,46 @@
+# Node dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build files
+dist/
+build/
+out/
+
+# Wallet files (for security)
+*.pem
+*.json.key
+wallet*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE folders
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Vercel
+.vercel/
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary directories
+.tmp/
+.temp/ 

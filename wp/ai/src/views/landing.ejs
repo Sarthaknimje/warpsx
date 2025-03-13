@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--background-dark);
+      color: var(--text-primary);
+      font-family: 'Inter', 'Poppins', sans-serif;
+    }
+    
+    .header {
+      padding: 1.5rem 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 22, 36, 0.8);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    
+    .logo span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-link {
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin-left: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(26, 26, 46, 0.5);
+    }
+    
+    .cta-button {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(65, 97, 255, 0.3);
+      color: white;
+    }
+    
+    .hero {
+      padding-top: 110px;
+      padding-bottom: 50px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .hero-content {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero-text {
+      max-width: 600px;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      font-weight: 700;
+      animation: fadeInUp 1s ease-out;
+    }
+    
+    .hero-title span {
+      display: block;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 20px;
+      animation: fadeInUp 1s ease-out 0.4s both;
+    }
+    
+    .hero-image {
+      max-width: 500px;
+      position: relative;
+      animation: fadeIn 1.5s ease-out;
+    }
+    
+    .app-mockup {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(65, 97, 255, 0.2);
+      overflow: hidden;
+    }
+    
+    .features {
+      padding: 80px 0;
+      background: rgba(15, 22, 36, 0.5);
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .feature-card {
+      background: rgba(26, 26, 46, 0.5);
+      border-radius: 12px;
+      padding: 30px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(65, 97, 255, 0.1);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border-color: rgba(65, 97, 255, 0.3);
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-primary);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: white;
+    }
+    
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .feature-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .how-it-works {
+      padding: 80px 0;
+    }
+    
+    .steps-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .step {
+      display: flex;
+      margin-bottom: 50px;
+      position: relative;
+    }
+    
+    .step:last-child {
+      margin-bottom: 0;
+    }
+    
+    .step:after {
+      content: '';
+      position: absolute;
+      top: 80px;
+      left: 40px;
+      bottom: -50px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+    }
+    
+    .step:last-child:after {
+      display: none;
+    }
+    
+    .step-number {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      margin-right: 30px;
+    }
+    
+    .step-content {
+      flex-grow: 1;
+    }
+    
+    .step-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .step-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .examples {
+      padding: 80px 0;
+      background: rgba(15, 22, 36, 0.5);
+    }
+    
+    .example-list {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .example-item {
+      background: rgba(26, 26, 46, 0.5);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(65, 97, 255, 0.1);
+    }
+    
+    .example-item:hover {
+      transform: translateX(10px);
+      border-color: rgba(65, 97, 255, 0.3);
+    }
+    
+    .example-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    
+    .example-title i {
+      margin-right: 10px;
+      color: var(--primary);
+    }
+    
+    .example-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .cta {
+      padding: 100px 0;
+      text-align: center;
+      background: url('/images/bg-cta.jpg') no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+    
+    .cta:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 22, 36, 0.8);
+    }
+    
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .cta-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    .cta-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      color: var(--text-secondary);
+    }
+    
+    .footer {
+      padding: 50px 0;
+      background: rgba(10, 15, 25, 0.8);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .footer-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    
+    .footer-logo span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .footer-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-link:hover {
+      color: var(--primary);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26, 26, 46, 0.5);
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .social-link:hover {
+      background: var(--gradient-primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .typed-container {
+      height: 3rem;
+      margin-bottom: 2rem;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 1.3rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .typing-effect {
+      overflow: hidden;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .typing-effect::after {
+      content: '';
+      width: 10px;
+      height: 20px;
+      background: var(--primary);
+      display: inline-block;
+      animation: blink 0.7s infinite;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @media (max-width: 992px) {
+      .hero-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .hero-text {
+        margin-bottom: 50px;
+      }
+      
+      .button-container {
+        justify-content: center;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: 30px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .feature-card {
+        padding: 20px;
+      }
+      
+      .step {
+        flex-direction: column;
+      }
+      
+      .step-number {
+        margin-bottom: 20px;
+        margin-right: 0;
+      }
+      
+      .step:after {
+        display: none;
+      }
+      
+      .cta-title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">
+        <span>WarpX</span> | MultiversX Warp Generator
+      </div>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#examples" class="nav-link">Examples</a>
+        <a href="#app" class="nav-link cta-button"><i class="bi bi-rocket-fill"></i> Launch App</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">MultiversX <span>Warp Generator</span></h1>
+        
+        <div class="typed-container">
+          <div class="typing-effect" id="typed-text">Stake 10 EGLD with validator...</div>
+        </div>
+        
+        <p class="hero-subtitle">Create blockchain transactions using natural language prompts. Generate shareable links and QR codes that anyone can use to execute your transactions. Available on web and Telegram.</p>
+        
+        <div class="button-container">
+          <a href="/app" class="cta-button"><i class="bi bi-rocket-fill"></i> Launch App</a>
+          <a href="https://t.me/WarpX_bot" target="_blank" class="cta-button" style="background: transparent; border: 2px solid var(--primary);"><i class="bi bi-telegram"></i> Try on Telegram</a>
+        </div>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/images/app-screenshot.png" alt="WarpX App Screenshot" class="app-mockup">
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2 class="section-title">Features</h2>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="bi bi-translate"></i></div>
+        <h3 class="feature-title">Natural Language</h3>
+        <p class="feature-description">Create transactions using plain English - no technical knowledge required.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon"><i class="bi bi-share"></i></div>
+        <h3 class="feature-title">Shareable Links</h3>
+        <p class="feature-description">Generate links that anyone can use to execute your transactions.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon"><i class="bi bi-qr-code"></i></div>
+        <h3 class="feature-title">QR Codes</h3>
+        <p class="feature-description">Share transactions via scannable QR codes for mobile ease.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon"><i class="bi bi-at"></i></div>
+        <h3 class="feature-title">Custom Aliases</h3>
+        <p class="feature-description">Create memorable aliases for your warps to make sharing easier.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon"><i class="bi bi-code-square"></i></div>
+        <h3 class="feature-title">Direct Contract</h3>
+        <p class="feature-description">Advanced users can specify direct contract calls with custom parameters.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon"><i class="bi bi-collection"></i></div>
+        <h3 class="feature-title">Batch Creation</h3>
+        <p class="feature-description">Create multiple warps at once for efficient transaction management.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3 class="step-title">Enter Your Prompt</h3>
+          <p class="step-description">Type what you want to do in plain English, such as "stake 10 EGLD" or "swap 5 EGLD for USDC".</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3 class="step-title">AI Processes Your Request</h3>
+          <p class="step-description">Our AI understands your intent and creates the appropriate blockchain transaction.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3 class="step-title">Get Your Warp Link</h3>
+          <p class="step-description">Receive a shareable link and QR code that executes the transaction when used.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3 class="step-title">Share with Anyone</h3>
+          <p class="step-description">Send the link or QR code to friends, post it online, or use it yourself later.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="examples" id="examples">
+    <h2 class="section-title">Example Prompts</h2>
+    
+    <div class="example-list">
+      <div class="example-item" onclick="window.location.href='/app?prompt=stake%2010%20EGLD'">
+        <h3 class="example-title"><i class="bi bi-lightning-charge-fill"></i> Stake EGLD</h3>
+        <p class="example-description">"stake 10 EGLD with validator erd1..."</p>
+      </div>
+      
+      <div class="example-item" onclick="window.location.href='/app?prompt=swap%201%20EGLD%20for%20USDC'">
+        <h3 class="example-title"><i class="bi bi-arrow-left-right"></i> Swap Tokens</h3>
+        <p class="example-description">"swap 1 EGLD for USDC at the best rate"</p>
+      </div>
+      
+      <div class="example-item" onclick="window.location.href='/app?prompt=lend%20100%20USDC'">
+        <h3 class="example-title"><i class="bi bi-cash-coin"></i> Lend Assets</h3>
+        <p class="example-description">"lend 100 USDC to earn interest"</p>
+      </div>
+      
+      <div class="example-item" onclick="window.location.href='/app?prompt=borrow%20500%20USDC%20with%202%20EGLD%20as%20collateral'">
+        <h3 class="example-title"><i class="bi bi-bank"></i> Borrow With Collateral</h3>
+        <p class="example-description">"borrow 500 USDC with 2 EGLD as collateral"</p>
+      </div>
+      
+      <div class="example-item" onclick="window.location.href='/app?prompt=mint%20NFT%20for%200.5%20EGLD'">
+        <h3 class="example-title"><i class="bi bi-image"></i> Mint NFTs</h3>
+        <p class="example-description">"mint an NFT for 0.5 EGLD from collection X"</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Create Your First Warp?</h2>
+      <p class="cta-subtitle">Start creating blockchain transactions with natural language in seconds.</p>
+      <a href="/app" class="cta-button"><i class="bi bi-rocket-fill"></i> Launch App Now</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <span>WarpX</span> | MultiversX Warp Generator
+      </div>
+      
+      <div class="footer-links">
+        <a href="#features" class="footer-link">Features</a>
+        <a href="#how-it-works" class="footer-link">How It Works</a>
+        <a href="#examples" class="footer-link">Examples</a>
+        <a href="/app" class="footer-link">Launch App</a>
+      </div>
+      
+      <div class="social-links">
+        <a href="https://t.me/WarpX_bot" target="_blank" class="social-link"><i class="bi bi-telegram"></i></a>
+        <a href="https://github.com/Sarthaknimje/wp" target="_blank" class="social-link"><i class="bi bi-github"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Typing effect
+    const texts = [
+      "Stake 10 EGLD with validator...",
+      "Swap 1 EGLD for USDC at the best rate...",
+      "Borrow 500 USDC with 2 EGLD as collateral...",
+      "Mint an NFT for 0.5 EGLD from collection X..."
+    ];
+    
+    const typedTextElement = document.getElementById('typed-text');
+    let currentTextIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
+    
+    function typeText() {
+      const currentText = texts[currentTextIndex];
+      
+      if (isDeleting) {
+        typedTextElement.textContent = currentText.substring(0, currentCharIndex - 1);
+        currentCharIndex--;
+        typingSpeed = 50;
+      } else {
+        typedTextElement.textContent = currentText.substring(0, currentCharIndex + 1);
+        currentCharIndex++;
+        typingSpeed = 100;
+      }
+      
+      if (!isDeleting && currentCharIndex === currentText.length) {
+        isDeleting = true;
+        typingSpeed = 1500;
+      } else if (isDeleting && currentCharIndex === 0) {
+        isDeleting = false;
+        currentTextIndex = (currentTextIndex + 1) % texts.length;
+        typingSpeed = 500;
+      }
+      
+      setTimeout(typeText, typingSpeed);
+    }
+    
+    // Start typing effect
+    setTimeout(typeText, 1000);
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

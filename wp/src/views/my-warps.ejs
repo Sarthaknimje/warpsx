@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Particles background -->
+  <div class="particles-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card shadow">
+          <div class="card-header">
+            <h1 class="text-center">My Warps</h1>
+            <p class="text-center mb-0">Manage your MultiversX Warps</p>
+          </div>
+          <div class="card-body">
+            <% if (error) { %>
+              <div class="alert alert-danger fade-in">
+                <strong><i class="fas fa-exclamation-circle me-2"></i>Error:</strong> <%= error %>
+              </div>
+            <% } %>
+            
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+              <div>
+                <a href="/" class="btn btn-outline-primary">
+                  <i class="fas fa-arrow-left me-2"></i>Back to Generator
+                </a>
+                <a href="/warp-stats" class="btn btn-outline-info ms-2">
+                  <i class="fas fa-chart-bar me-2"></i>Statistics
+                </a>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                <label class="form-check-label" for="darkModeSwitch">
+                  <i class="fas fa-moon me-2"></i>Dark Mode
+                </label>
+              </div>
+            </div>
+            
+            <div class="card mb-4">
+              <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-wallet me-2"></i>Your Wallet</h3>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <p class="mb-2"><strong>Address:</strong></p>
+                    <code class="d-block mb-3"><%= address %></code>
+                  </div>
+                  <a href="https://devnet-explorer.multiversx.com/accounts/<%= address %>" target="_blank" class="btn btn-outline-primary">
+                    <i class="fas fa-external-link-alt me-2"></i>View on Explorer
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <!-- All Warps Section -->
+            <h3 class="mb-3"><i class="fas fa-cubes me-2"></i>Your Warps</h3>
+            
+            <div id="all-warps-container">
+              <div class="text-center py-4">
+                <div class="loading-spinner"></div>
+                <p class="mt-3">Loading your warps...</p>
+              </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+              <a href="/" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>Create New Warp
+              </a>
+            </div>
+          </div>
+          <div class="card-footer text-center">
+            <p class="mb-0">MultiversX AI Warp Generator</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the alias <strong id="deleteAliasName"></strong>?</p>
+          <p class="text-danger">This action cannot be undone. The warp will still exist but will no longer be accessible via the alias.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Local Warp Modal -->
+  <div class="modal fade" id="deleteLocalModal" tabindex="-1" aria-labelledby="deleteLocalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteLocalModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to remove this warp from local storage?</p>
+          <p>This will only remove it from your browser's storage. The warp will still exist on the blockchain.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmLocalDelete">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Delete alias functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const deleteButtons = document.querySelectorAll('.delete-alias');
+      const confirmDeleteButton = document.getElementById('confirmDelete');
+      const deleteAliasNameElement = document.getElementById('deleteAliasName');
+      const confirmLocalDeleteButton = document.getElementById('confirmLocalDelete');
+      let currentAlias = '';
+      let currentLocalTxHash = '';
+      
+      // Load all warps
+      loadAllWarps();
+      
+      function loadAllWarps() {
+        const allWarpsContainer = document.getElementById('all-warps-container');
+        const localWarps = window.warpStorage.getWarps();
+        const blockchainWarps = <%= JSON.stringify(warps) %>;
+        
+        // Combine warps from both sources
+        const allWarps = [...blockchainWarps];
+        
+        // Add local warps that aren't already in blockchain warps
+        localWarps.forEach(localWarp => {
+          // Check if this warp is already in the blockchain warps
+          const exists = allWarps.some(warp => warp.txHash === localWarp.txHash);
+          if (!exists) {
+            allWarps.push({
+              ...localWarp,
+              isLocal: true,
+              status: 'success',
+              link: localWarp.warpLink
+            });
+          }
+        });
+        
+        if (allWarps.length === 0) {
+          allWarpsContainer.innerHTML = `
+            <div class="alert alert-info fade-in">
+              <p class="mb-0"><i class="fas fa-info-circle me-2"></i>You haven't created any warps yet. <a href="/">Create your first warp</a>!</p>
+            </div>
+          `;
+          return;
+        }
+        
+        let html = `<div class="warp-list">`;
+        
+        allWarps.forEach(warp => {
+          const isLocal = warp.isLocal;
+          const statusClass = warp.status === 'success' ? 'success' : (warp.status === 'pending' ? 'pending' : 'failed');
+          const statusText = isLocal ? 'Local' : (warp.status === 'success' ? 'Success' : (warp.status === 'pending' ? 'Pending' : 'Failed'));
+          
+          html += `
+            <div class="warp-card fade-in">
+              <div class="warp-card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span><i class="fas fa-${warp.alias ? 'tag' : 'hashtag'} me-2"></i>${warp.alias || 'No Alias'}</span>
+                  <span class="warp-status warp-status-${statusClass}">
+                    ${statusText}
+                  </span>
+                </div>
+              </div>
+              <div class="warp-card-body">
+                ${warp.prompt ? `
+                  <p class="mb-1"><strong>Prompt:</strong></p>
+                  <p class="mb-3">${warp.prompt}</p>
+                ` : ''}
+                
+                <p class="mb-2"><strong>Transaction:</strong></p>
+                <code class="d-block mb-3 small">${warp.txHash}</code>
+                
+                <p class="mb-1"><strong>Created:</strong></p>
+                <p class="mb-0">
+                  <i class="fas fa-calendar-alt me-2"></i>${new Date(warp.deploymentTime || warp.savedAt || warp.createdAt).toLocaleString()}
+                </p>
+              </div>
+              <div class="warp-card-footer">
+                <a href="${warp.link}" target="_blank" class="btn btn-sm btn-primary">
+                  <i class="fas fa-external-link-alt me-1"></i>View
+                </a>
+                <a href="/warp-analytics/${warp.alias || 'hash:' + warp.txHash}" class="btn btn-sm btn-secondary">
+                  <i class="fas fa-chart-line me-1"></i>Analytics
+                </a>
+                ${warp.alias && !isLocal ? `
+                  <button 
+                    class="btn btn-sm btn-danger delete-alias" 
+                    data-alias="${warp.alias}"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#deleteModal">
+                    <i class="fas fa-trash-alt me-1"></i>Delete
+                  </button>
+                ` : isLocal ? `
+                  <button 
+                    class="btn btn-sm btn-danger delete-local-warp" 
+                    data-txhash="${warp.txHash}"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#deleteLocalModal">
+                    <i class="fas fa-trash-alt me-1"></i>Remove
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `</div>`;
+        allWarpsContainer.innerHTML = html;
+        
+        // Add event listeners to delete buttons
+        document.querySelectorAll('.delete-local-warp').forEach(button => {
+          button.addEventListener('click', function() {
+            currentLocalTxHash = this.dataset.txhash;
+          });
+        });
+        
+        document.querySelectorAll('.delete-alias').forEach(button => {
+          button.addEventListener('click', function() {
+            currentAlias = this.dataset.alias;
+            deleteAliasNameElement.textContent = currentAlias;
+          });
+        });
+      }
+      
+      confirmDeleteButton.addEventListener('click', async function() {
+        if (!currentAlias) return;
+        
+        try {
+          confirmDeleteButton.disabled = true;
+          confirmDeleteButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...';
+          
+          const response = await fetch('/delete-warp', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ alias: currentAlias })
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Close the modal
+            bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+              <strong><i class="fas fa-check-circle me-2"></i>Success!</strong> ${result.message}
+              <a href="${result.explorerLink}" target="_blank" class="ms-2">View transaction</a>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.querySelector('.card-body').prepend(alertDiv);
+            
+            // Remove the row or update the UI
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
+          } else {
+            throw new Error(result.error || 'Failed to delete alias');
+          }
+        } catch (error) {
+          console.error('Error deleting alias:', error);
+          
+          // Show error message
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+          alertDiv.innerHTML = `
+            <strong><i class="fas fa-exclamation-circle me-2"></i>Error!</strong> ${error.message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          `;
+          document.querySelector('.card-body').prepend(alertDiv);
+          
+          // Close the modal
+          bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+        } finally {
+          confirmDeleteButton.disabled = false;
+          confirmDeleteButton.textContent = 'Delete';
+        }
+      });
+      
+      // Handle local warp deletion
+      if (confirmLocalDeleteButton) {
+        confirmLocalDeleteButton.addEventListener('click', function() {
+          if (!currentLocalTxHash) return;
+          
+          try {
+            // Delete from local storage
+            window.warpStorage.deleteWarp(currentLocalTxHash);
+            
+            // Close the modal
+            bootstrap.Modal.getInstance(document.getElementById('deleteLocalModal')).hide();
+            
+            // Reload all warps
+            loadAllWarps();
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+              <strong><i class="fas fa-check-circle me-2"></i>Success!</strong> Warp removed from local storage.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.querySelector('.card-body').prepend(alertDiv);
+          } catch (error) {
+            console.error('Error removing local warp:', error);
+            
+            // Show error message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+            alertDiv.innerHTML = `
+              <strong><i class="fas fa-exclamation-circle me-2"></i>Error!</strong> ${error.message}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.querySelector('.card-body').prepend(alertDiv);
+            
+            // Close the modal
+            bootstrap.Modal.getInstance(document.getElementById('deleteLocalModal')).hide();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

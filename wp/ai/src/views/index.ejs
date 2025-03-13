@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/enhanced-style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
+  <style>
+    /* Fallback CSS variables if theme.css doesn't load */
+    :root {
+      --primary: #4161FF;
+      --primary-light: #6A8CFF;
+      --secondary: #7C5CFF;
+      --secondary-light: #9F87FF;
+      --accent: #FF4C8B;
+      --accent-light: #FF7AA8;
+      --text-primary: #FFFFFF;
+      --text-secondary: #B3B3CC;
+      --background-dark: #0F1624;
+      --background-card: #1A1A2E;
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --error: #F44336;
+      --error-light: #FF7961;
+      --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--background-dark, #0F1624);
+      color: var(--text-primary, #FFFFFF);
+      font-family: 'Inter', 'Poppins', sans-serif;
+    }
+    
+    .header {
+      padding: 1.5rem 2rem;
+      background: rgba(15, 22, 36, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    
+    .logo span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .main-container {
+      flex: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .input-area {
+      position: relative;
+      margin-top: 3rem;
+    }
+    
+    .input-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    
+    .prompt-input {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 12px;
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(65, 97, 255, 0.2);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+    
+    .prompt-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(65, 97, 255, 0.2);
+      outline: none;
+    }
+    
+    .alias-input {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      background: rgba(26, 26, 46, 0.5);
+      border: 1px solid rgba(65, 97, 255, 0.1);
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    
+    .alias-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(65, 97, 255, 0.1);
+      outline: none;
+    }
+    
+    .submit-btn {
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 600;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(65, 97, 255, 0.3);
+    }
+    
+    .info-container {
+      display: none;
+      background: rgba(26, 26, 46, 0.7);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .info-header {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 4s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% {
+        background-position: -100% center;
+      }
+      100% {
+        background-position: 200% center;
+      }
+    }
+    
+    .info-content {
+      margin-bottom: 1.5rem;
+    }
+    
+    .link-container {
+      background: rgba(15, 22, 36, 0.5);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+    
+    .link-container a {
+      color: var(--primary);
+      word-break: break-all;
+    }
+    
+    .link-container a:hover {
+      color: var(--secondary);
+    }
+    
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      margin-left: 1rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+    
+    .copy-btn:hover {
+      background: rgba(65, 97, 255, 0.1);
+    }
+    
+    .qr-code-container {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    
+    .qr-code {
+      position: relative;
+      border-radius: 10px;
+      padding: 1rem;
+      background: white;
+      display: inline-block;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .qr-code:after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(65, 97, 255, 0.5), rgba(124, 92, 255, 0.5));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .qr-code:hover {
+      transform: scale(1.08);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .qr-code:hover:after {
+      opacity: 1;
+    }
+    
+    .qr-code img {
+      display: block;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .examples-container {
+      margin-top: 3rem;
+    }
+    
+    .examples-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    
+    .examples-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    
+    .example-card {
+      background: rgba(26, 26, 46, 0.5);
+      border-radius: 10px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .example-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(65, 97, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .example-text {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    
+    .example-description {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    
+    .footer {
+      margin-top: auto;
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+    
+    .loading-indicator {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(15, 22, 36, 0.8);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+    
+    .loading-text {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .welcome-message {
+      text-align: center;
+      margin: 4rem 0;
+    }
+    
+    .welcome-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .welcome-title span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 1s ease-out;
+    }
+    
+    /* Error notification styling */
+    .error-notification {
+      background: linear-gradient(135deg, var(--error), var(--error-light));
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .error-icon {
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .error-message {
+      flex: 1;
+    }
+    
+    /* Tab styles */
+    .nav-tabs {
+      border-bottom: 1px solid rgba(65, 97, 255, 0.2);
+      margin-bottom: 1.5rem;
+    }
+    
+    .nav-tabs .nav-link {
+      color: var(--text-secondary);
+      border: none;
+      background: transparent;
+      padding: 0.75rem 1rem;
+      margin-right: 1rem;
+      font-weight: 500;
+      position: relative;
+    }
+    
+    .nav-tabs .nav-link:hover {
+      color: var(--text-primary);
+    }
+    
+    .nav-tabs .nav-link.active {
+      color: var(--primary);
+      background: transparent;
+      border: none;
+    }
+    
+    .nav-tabs .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+    }
+    
+    /* Batch item styles */
+    .batch-item {
+      background: rgba(26, 26, 46, 0.5);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .batch-item h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    /* Additional animations and enhanced UI */
+    .explorer-link-container {
+      background: rgba(25, 30, 50, 0.8);
+      border: 1px solid rgba(124, 92, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .explorer-link-container:hover {
+      border-color: var(--secondary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(124, 92, 255, 0.2);
+    }
+    
+    .explorer-link {
+      color: var(--secondary);
+      transition: all 0.3s ease;
+    }
+    
+    .explorer-link:hover {
+      color: var(--secondary-light);
+    }
+    
+    /* Pulse animation for buttons */
+    .submit-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .submit-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%, -50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .submit-btn:hover::after {
+      animation: ripple 1.2s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(30, 30);
+        opacity: 0;
+      }
+    }
+    
+    /* Alias checking animation */
+    @keyframes checking {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    
+    .alias-checking {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      animation: checking 1.5s infinite;
+      font-size: 0.8rem;
+    }
+    
+    .alias-available {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--success);
+      font-size: 0.8rem;
+    }
+    
+    .alias-unavailable {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--error);
+      font-size: 0.8rem;
+    }
+    
+    .info-container {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    .placeholder-qr {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, rgba(65, 97, 255, 0.2), rgba(124, 92, 255, 0.3));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    
+    .placeholder-qr i {
+      font-size: 3rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1rem;
+    }
+    
+    .placeholder-qr span {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      padding: 0 10px;
+    }
+    
+    /* Toast notification styles */
+    .toast-notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      min-width: 250px;
+      max-width: 350px;
+    }
+    
+    .toast-success {
+      background: linear-gradient(135deg, #3a8040, #4CAF50);
+      border-left: 5px solid #2E7D32;
+    }
+    
+    .toast-error {
+      background: linear-gradient(135deg, #d32f2f, #ff5252);
+      border-left: 5px solid #b71c1c;
+    }
+    
+    .toast-icon {
+      margin-right: 12px;
+      font-size: 1.2rem;
+      color: white;
+    }
+    
+    .toast-message {
+      color: white;
+      font-weight: 500;
+    }
+    
+    .fade-out {
+      animation: fadeOut 0.3s ease-in-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+    
+    /* Enhanced text styling */
+    .info-content p strong {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-shadow: 0 0 20px rgba(65, 97, 255, 0.3);
+      letter-spacing: 0.5px;
+    }
+    
+    /* Success badge with animation */
+    .success-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--success), #2E7D32);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+      animation: pulse-success 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-success {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* Transaction hash highlight */
+    .tx-hash {
+      font-family: 'Space Grotesk', monospace;
+      background: rgba(26, 26, 46, 0.8);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+      margin: 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+    
+    .tx-hash:hover {
+      background: rgba(31, 31, 55, 0.9);
+      border-left-color: var(--secondary);
+    }
+    
+    /* Loading dots animation for alias checking */
+    .loading-dots:after {
+      content: '';
+      animation: loadingDots 1.5s infinite;
+    }
+    
+    @keyframes loadingDots {
+      0% { content: '.'; }
+      33% { content: '..'; }
+      66% { content: '...'; }
+      100% { content: '.'; }
+    }
+    
+    /* Input focus styles */
+    .input-container.input-focused {
+      position: relative;
+    }
+    
+    .input-container.input-focused:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--gradient-primary);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+      z-index: 1;
+    }
+    
+    .input-container.input-focused:after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(65, 97, 255, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 5px rgba(65, 97, 255, 0.1);
+      }
+    }
+    
+    /* Navigation links */
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-link {
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin-left: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(26, 26, 46, 0.5);
+    }
+    
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">
+        <span>WarpX</span> | MultiversX Warp Generator
+      </div>
+      <div class="nav-links">
+        <a href="https://warp-lgeuotote-sarthaknimjes-projects.vercel.app" target="_blank" class="nav-link">
+          <i class="bi bi-house-door"></i> Home
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="welcome-message">
+      <h1 class="welcome-title">MultiversX <span>Warp Generator</span></h1>
+      <p class="welcome-subtitle">Create blockchain transactions with natural language prompts. Generate shareable links and QR codes that anyone can use to execute your transactions.</p>
+    </div>
+    
+    <div class="input-area">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="prompt-tab" data-bs-toggle="tab" data-bs-target="#prompt-form" type="button" role="tab" aria-controls="prompt-form" aria-selected="true">AI Prompt</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="contract-tab" data-bs-toggle="tab" data-bs-target="#contract-form" type="button" role="tab" aria-controls="contract-form" aria-selected="false">Direct Contract</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch-form" type="button" role="tab" aria-controls="batch-form" aria-selected="false">Batch Create</button>
+        </li>
+      </ul>
+      
+      <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="prompt-form" role="tabpanel" aria-labelledby="prompt-tab">
+          <form id="warpForm" action="/create-warp" method="post">
+            <div class="input-container">
+              <input type="text" id="prompt" name="prompt" class="prompt-input" placeholder="Enter your prompt (e.g., 'stake 10 EGLD' or 'swap 1 EGLD for USDC')">
+            </div>
+            <div class="input-container">
+              <input type="text" id="alias" name="alias" class="alias-input" placeholder="Enter an alias for your Warp (optional)">
+            </div>
+            <button type="submit" class="submit-btn">Generate Warp</button>
+          </form>
+        </div>
+        
+        <div class="tab-pane fade" id="contract-form" role="tabpanel" aria-labelledby="contract-tab">
+          <form id="contractForm" action="/direct-contract" method="post">
+            <div class="input-container">
+              <input type="text" id="contractAddress" name="contractAddress" class="prompt-input" placeholder="Contract Address (e.g., 'erd1...')" required>
+            </div>
+            <div class="input-container">
+              <input type="text" id="functionName" name="functionName" class="prompt-input" placeholder="Function Name (e.g., 'delegate')" required>
+            </div>
+            <div class="input-container">
+              <input type="text" id="args" name="args" class="prompt-input" placeholder="Arguments (comma separated, e.g., '0x01,0x02')">
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="input-container">
+                  <input type="text" id="value" name="value" class="alias-input" placeholder="Value in EGLD (e.g., '1.5')">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-container">
+                  <input type="text" id="gasLimit" name="gasLimit" class="alias-input" placeholder="Gas Limit (e.g., '60000000')">
+                </div>
+              </div>
+            </div>
+            <div class="input-container">
+              <input type="text" id="contractAlias" name="alias" class="alias-input" placeholder="Enter an alias for your Warp (optional)">
+            </div>
+            <button type="submit" class="submit-btn">Create Contract Warp</button>
+          </form>
+        </div>
+        
+        <div class="tab-pane fade" id="batch-form" role="tabpanel" aria-labelledby="batch-tab">
+          <form id="batchForm" action="/batch-create" method="post">
+            <div class="mb-3">
+              <label for="prompts" class="form-label text-white">Enter Multiple Prompts (One per line)</label>
+              <textarea id="prompts" name="prompts" class="form-control prompt-input" rows="5" placeholder="stake 10 EGLD&#10;swap 1 EGLD for USDC&#10;lend 100 USDC" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Create Batch Warps</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <% if (error) { %>
+      <div class="error-notification">
+        <div class="error-icon">⚠️</div>
+        <div class="error-message">
+          <strong>Error:</strong> <%= error %>
+        </div>
+      </div>
+    <% } %>
+    
+    <% if (typeof warpResult !== 'undefined' && warpResult) { %>
+      <div class="info-container" style="display: block;">
+        <div class="success-badge"><i class="bi bi-check-circle-fill me-1"></i> Warp Created Successfully!</div>
+        <h2 class="info-header">Your Warp is Ready!</h2>
+        
+        <div class="info-content">
+          <p><strong>Transaction Hash:</strong></p>
+          <div class="tx-hash" onclick="copyToClipboard('<%= warpResult.txHash %>')" title="Click to copy">
+            <%= warpResult.txHash %> <i class="bi bi-clipboard ms-1"></i>
+          </div>
+        </div>
+        
+        <div class="link-container">
+          <div>
+            <strong>Shareable Link:</strong>
+            <a href="<%= warpResult.link %>" target="_blank"><%= warpResult.link %></a>
+          </div>
+          <button class="copy-btn" onclick="copyToClipboard('<%= warpResult.link %>')">Copy Link</button>
+        </div>
+        
+        <% if (warpResult.alias) { %>
+          <div class="link-container">
+            <div>
+              <strong>Alias Link:</strong>
+              <a href="https://devnet.usewarp.to/<%= warpResult.alias %>" target="_blank">https://devnet.usewarp.to/<%= warpResult.alias %></a>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('https://devnet.usewarp.to/<%= warpResult.alias %>')">Copy Link</button>
+          </div>
+        <% } %>
+        
+        <div class="qr-code-container">
+          <div class="qr-code">
+            <img src="<%= warpResult.qrCode %>" alt="QR Code" onerror="this.onerror=null; handleQRCodeError(this);" class="fade-in">
+          </div>
+          <p style="margin-top: 1rem;">Scan this QR code to access your Warp</p>
+        </div>
+        
+        <% if (warpResult.explorerLink) { %>
+          <div class="link-container mt-4 explorer-link-container">
+            <div>
+              <strong>Explorer Link:</strong>
+              <a href="<%= warpResult.explorerLink %>" target="_blank" class="explorer-link">
+                <i class="bi bi-box-arrow-up-right me-1"></i> View Transaction on MultiversX Explorer
+              </a>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('<%= warpResult.explorerLink %>')">Copy Link</button>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+    
+    <% if (typeof result !== 'undefined' && result) { %>
+      <div class="info-container" style="display: block;">
+        <div class="success-badge"><i class="bi bi-check-circle-fill me-1"></i> Warp Created Successfully!</div>
+        <h2 class="info-header">Your Warp is Ready!</h2>
+        
+        <div class="info-content">
+          <p><strong>Transaction Hash:</strong></p>
+          <div class="tx-hash" onclick="copyToClipboard('<%= result.txHash %>')" title="Click to copy">
+            <%= result.txHash %> <i class="bi bi-clipboard ms-1"></i>
+          </div>
+        </div>
+        
+        <div class="link-container">
+          <div>
+            <strong>Shareable Link:</strong>
+            <a href="<%= result.link %>" target="_blank"><%= result.link %></a>
+          </div>
+          <button class="copy-btn" onclick="copyToClipboard('<%= result.link %>')">Copy Link</button>
+        </div>
+        
+        <% if (result.alias) { %>
+          <div class="link-container">
+            <div>
+              <strong>Alias Link:</strong>
+              <a href="https://devnet.usewarp.to/<%= result.alias %>" target="_blank">https://devnet.usewarp.to/<%= result.alias %></a>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('https://devnet.usewarp.to/<%= result.alias %>')">Copy Link</button>
+          </div>
+        <% } %>
+        
+        <div class="qr-code-container">
+          <div class="qr-code">
+            <img src="<%= result.qrCode %>" alt="QR Code for Warp #<%= index + 1 %>" onerror="this.onerror=null; handleQRCodeError(this);" class="fade-in">
+          </div>
+          <p style="margin-top: 1rem;">Scan this QR code to access your Warp</p>
+        </div>
+        
+        <% if (result.explorerLink) { %>
+          <div class="link-container mt-4 explorer-link-container">
+            <div>
+              <strong>Explorer Link:</strong>
+              <a href="<%= result.explorerLink %>" target="_blank" class="explorer-link">
+                <i class="bi bi-box-arrow-up-right me-1"></i> View Transaction on MultiversX Explorer
+              </a>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('<%= result.explorerLink %>')">Copy Link</button>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+    
+    <% if (typeof results !== 'undefined' && results && results.length > 0) { %>
+      <div class="info-container" style="display: block;">
+        <h2 class="info-header">Batch Warps Created Successfully!</h2>
+        
+        <% results.forEach((result, index) => { %>
+          <div class="batch-item mb-4">
+            <h3 class="mb-3">Warp #<%= index + 1 %>: <%= result.prompt %></h3>
+            
+            <div class="info-content">
+              <p><strong>Transaction Hash:</strong> <%= result.txHash %></p>
+            </div>
+            
+            <div class="link-container">
+              <div>
+                <strong>Shareable Link:</strong>
+                <a href="<%= result.link %>" target="_blank"><%= result.link %></a>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('<%= result.link %>')">Copy Link</button>
+            </div>
+            
+            <% if (result.alias) { %>
+              <div class="link-container">
+                <div>
+                  <strong>Alias Link:</strong>
+                  <a href="https://devnet.usewarp.to/<%= result.alias %>" target="_blank">https://devnet.usewarp.to/<%= result.alias %></a>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('https://devnet.usewarp.to/<%= result.alias %>')">Copy Link</button>
+              </div>
+            <% } %>
+            
+            <div class="qr-code-container">
+              <div class="qr-code">
+                <img src="<%= result.qrCode %>" alt="QR Code for Warp #<%= index + 1 %>" onerror="this.onerror=null; handleQRCodeError(this);" class="fade-in">
+              </div>
+              <p style="margin-top: 1rem;">Scan this QR code to access your Warp</p>
+            </div>
+            
+            <% if (result.explorerLink) { %>
+              <div class="link-container mt-4 explorer-link-container">
+                <div>
+                  <strong>Explorer Link:</strong>
+                  <a href="<%= result.explorerLink %>" target="_blank" class="explorer-link">
+                    <i class="bi bi-box-arrow-up-right me-1"></i> View Transaction on MultiversX Explorer
+                  </a>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('<%= result.explorerLink %>')">Copy Link</button>
+              </div>
+            <% } %>
+          </div>
+          
+          <% if (index < results.length - 1) { %>
+            <hr class="my-4" style="border-color: rgba(255, 255, 255, 0.1);">
+          <% } %>
+        <% }); %>
+      </div>
+    <% } %>
+    
+    <div class="examples-container">
+      <h3 class="examples-title">Example Prompts:</h3>
+      <div class="examples-list">
+        <div class="example-card" onclick="fillPrompt('Stake 10 EGLD with validator erd1qqqqqqqqqqqqqpgqqz6vp7vs3p7u8t8gxppjq8qwkx7urj4g7a3s69j92r')">
+          <div class="example-text">Stake 10 EGLD</div>
+          <div class="example-description">Delegate EGLD to a validator to earn staking rewards</div>
+        </div>
+        <div class="example-card" onclick="fillPrompt('Swap 1 EGLD for USDC at the best rate')">
+          <div class="example-text">Swap 1 EGLD for USDC</div>
+          <div class="example-description">Exchange EGLD for USDC tokens on a DEX</div>
+        </div>
+        <div class="example-card" onclick="fillPrompt('Lend 100 USDC to earn interest')">
+          <div class="example-text">Lend 100 USDC</div>
+          <div class="example-description">Lend USDC to earn interest on your crypto</div>
+        </div>
+        <div class="example-card" onclick="fillPrompt('Borrow 500 USDC with 2 EGLD as collateral')">
+          <div class="example-text">Borrow 500 USDC</div>
+          <div class="example-description">Borrow USDC using EGLD as collateral</div>
+        </div>
+        <div class="example-card" onclick="fillPrompt('Mint an NFT for 0.5 EGLD from collection XOXO')">
+          <div class="example-text">Mint an NFT</div>
+          <div class="example-description">Mint an NFT from a specific collection</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>© <%= new Date().getFullYear() %> WarpX | MultiversX Warp Generator | Built for the MultiversX Hackathon</p>
+  </div>
+  
+  <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+    <div class="spinner"></div>
+    <div class="loading-text">Creating your Warp...</div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Parse URL query parameters to prefill prompt field
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const promptParam = urlParams.get('prompt');
+      
+      if (promptParam) {
+        const promptInput = document.getElementById('prompt');
+        if (promptInput) {
+          promptInput.value = decodeURIComponent(promptParam);
+          // If we have tabs, switch to the prompt tab
+          const promptTab = document.getElementById('prompt-tab');
+          if (promptTab && window.bootstrap) {
+            bootstrap.Tab.getOrCreateInstance(promptTab).show();
+          }
+        }
+      }
+      
+      // Immediately hide the loading indicator when the page loads
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      if (loadingIndicator) {
+        loadingIndicator.style.display = 'none';
+      }
+      
+      // Initialize all forms and UI elements
+      setupUI();
+    });
+    
+    function setupUI() {
+      // Set up copy to clipboard functionality
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const text = this.getAttribute('data-clipboard-text') || this.parentNode.querySelector('a').href;
+          copyToClipboard(text);
+        });
+      });
+      
+      // Set up form submissions
+      const warpForm = document.getElementById('warpForm');
+      const contractForm = document.getElementById('contractForm');
+      const batchForm = document.getElementById('batchForm');
+      
+      if (warpForm) {
+        warpForm.addEventListener('submit', showLoading);
+      }
+      
+      if (contractForm) {
+        contractForm.addEventListener('submit', showLoading);
+      }
+      
+      if (batchForm) {
+        batchForm.addEventListener('submit', showLoading);
+      }
+      
+      // Set up alias availability checking
+      setupAliasChecking('alias');
+      setupAliasChecking('contractAlias');
+      
+      // Check if there's an error element or result container visible
+      const errorElement = document.querySelector('.error-notification');
+      const resultContainer = document.querySelector('.info-container[style="display: block;"]');
+      
+      if (errorElement || resultContainer) {
+        window.scrollTo({
+          top: document.querySelector('.input-area').offsetHeight,
+          behavior: 'smooth'
+        });
+      }
+      
+      // Add animated entrance for result containers
+      document.querySelectorAll('.info-container[style="display: block;"]').forEach(container => {
+        container.classList.add('fade-in');
+      });
+    }
+    
+    // Function to check alias availability
+    function setupAliasChecking(inputId) {
+      const aliasInput = document.getElementById(inputId);
+      if (!aliasInput) return;
+      
+      const statusDiv = document.createElement('div');
+      aliasInput.parentNode.style.position = 'relative';
+      aliasInput.parentNode.appendChild(statusDiv);
+      
+      // Create a visual input highlight effect
+      aliasInput.addEventListener('focus', function() {
+        this.parentNode.classList.add('input-focused');
+      });
+      
+      aliasInput.addEventListener('blur', function() {
+        this.parentNode.classList.remove('input-focused');
+      });
+      
+      let timeout = null;
+      
+      aliasInput.addEventListener('input', function() {
+        const alias = this.value.trim();
+        
+        // Clear existing status
+        statusDiv.className = '';
+        statusDiv.textContent = '';
+        
+        // Change input border color back to default
+        this.style.borderColor = '';
+        
+        // If alias is empty, do nothing
+        if (!alias) return;
+        
+        // Clear previous timeout
+        if (timeout) clearTimeout(timeout);
+        
+        // Set checking status with delay
+        timeout = setTimeout(() => {
+          statusDiv.className = 'alias-checking';
+          statusDiv.innerHTML = '<i class="bi bi-hourglass-split"></i> Checking<span class="loading-dots"></span>';
+          
+          // Add a subtle pulse to the input
+          this.style.animation = 'pulse 1.5s infinite';
+          
+          // Make API call to check alias availability
+          fetch(`/check-alias?alias=${encodeURIComponent(alias)}`)
+            .then(response => response.json())
+            .then(data => {
+              // Remove the pulse animation
+              aliasInput.style.animation = '';
+              
+              if (data.available) {
+                statusDiv.className = 'alias-available';
+                statusDiv.innerHTML = '<i class="bi bi-check-circle-fill"></i> Available!';
+                // Add a subtle green glow to the input
+                aliasInput.style.borderColor = 'var(--success)';
+                aliasInput.style.boxShadow = '0 0 0 2px rgba(76, 175, 80, 0.2)';
+              } else {
+                statusDiv.className = 'alias-unavailable';
+                statusDiv.innerHTML = '<i class="bi bi-x-circle-fill"></i> Unavailable';
+                // Add a subtle red glow to the input
+                aliasInput.style.borderColor = 'var(--error)';
+                aliasInput.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+              }
+            })
+            .catch(error => {
+              console.error('Error checking alias:', error);
+              statusDiv.className = '';
+              statusDiv.textContent = '';
+              aliasInput.style.animation = '';
+            });
+        }, 500);
+      });
+    }
+    
+    // Function to handle QR code loading errors
+    function handleQRCodeError(img) {
+      console.log('QR code failed to load:', img.src);
+      
+      // Replace the broken image with a placeholder
+      const qrDiv = img.parentNode;
+      
+      // Create placeholder
+      const placeholder = document.createElement('div');
+      placeholder.className = 'placeholder-qr';
+      placeholder.innerHTML = `
+        <i class="bi bi-qr-code"></i>
+        <span>QR code unavailable. Use the shareable link instead.</span>
+      `;
+      
+      // Replace the img with the placeholder
+      qrDiv.replaceChild(placeholder, img);
+    }
+    
+    function showLoading() {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      if (loadingIndicator) {
+        loadingIndicator.style.display = 'flex';
+      }
+    }
+    
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        // Show toast notification instead of alert
+        showToast('Link copied to clipboard!');
+      }, function(err) {
+        console.error('Could not copy text: ', err);
+        showToast('Failed to copy. Try manually selecting the link.', 'error');
+      });
+    }
+    
+    // Toast notification for better UX
+    function showToast(message, type = 'success') {
+      // Remove any existing toasts
+      const existingToast = document.querySelector('.toast-notification');
+      if (existingToast) {
+        existingToast.remove();
+      }
+      
+      // Create toast element
+      const toast = document.createElement('div');
+      toast.className = `toast-notification toast-${type} fade-in`;
+      toast.innerHTML = `
+        <div class="toast-icon">
+          <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        </div>
+        <div class="toast-message">${message}</div>
+      `;
+      
+      // Add to document
+      document.body.appendChild(toast);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 3000);
+    }
+    
+    function fillPrompt(text) {
+      const promptInput = document.getElementById('prompt');
+      if (promptInput) {
+        promptInput.value = text;
+        promptInput.focus();
+        // Switch to the prompt tab if it's not already active
+        const promptTab = document.getElementById('prompt-tab');
+        if (promptTab && window.bootstrap) {
+          bootstrap.Tab.getOrCreateInstance(promptTab).show();
+        }
+      }
+    }
+
+    // Add resource loading error handling
+    window.addEventListener('error', function(e) {
+      if (e.target.tagName === 'LINK' || e.target.tagName === 'SCRIPT' || e.target.tagName === 'IMG') {
+        console.error('Resource loading error:', e.target.src || e.target.href);
+        // Try to reload the resource after a delay
+        setTimeout(() => {
+          const newElement = e.target.cloneNode(true);
+          e.target.parentNode.replaceChild(newElement, e.target);
+        }, 1000);
+      }
+    }, true);
+
+    // Hide loading indicator if it's been showing for too long
+    setTimeout(() => {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      if (loadingIndicator && loadingIndicator.style.display === 'flex') {
+        loadingIndicator.style.display = 'none';
+      }
+    }, 10000); // 10 seconds timeout - reduced from 30s for better user experience
+  </script>
+</body>
+</html> 
