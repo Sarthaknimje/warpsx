@@ -193,9 +193,10 @@ function parsePrompt(prompt) {
 /**
  * Create a warp from the parsed intent data
  * @param {Object} intentData - The parsed intent data
+ * @param {string} prompt - The original user prompt
  * @returns {Promise<Object>} - The created warp
  */
-async function createWarpFromIntent(intentData) {
+async function createWarpFromIntent(intentData, prompt) {
   try {
     // Import all templates
     const templates = require('./templates/warpTemplates');
@@ -287,6 +288,9 @@ async function createWarpFromIntent(intentData) {
       default:
         throw new Error('Unsupported intent: ' + intentData.intent);
     }
+    
+    // Add the prompt to the warp data
+    warp.prompt = prompt;
     
     // Validate warp structure before proceeding
     validateWarp(warp);
@@ -630,7 +634,7 @@ async function processBatchPrompts(prompts) {
       const intentData = parsePrompt(prompt);
       
       // Create a warp from the intent
-      const warp = await createWarpFromIntent(intentData);
+      const warp = await createWarpFromIntent(intentData, prompt);
       
       // Get a fresh nonce for each transaction
       const nonce = await getNonce(wallet.address);
@@ -695,7 +699,7 @@ async function processPrompt(prompt, alias = null) {
     const intentData = parsePrompt(prompt);
     
     // Create a warp from the intent
-    const warp = await createWarpFromIntent(intentData);
+    const warp = await createWarpFromIntent(intentData, prompt);
     
     // Load the wallet
     let wallet;
@@ -779,7 +783,7 @@ async function previewWarp(prompt) {
     const intentData = parsePrompt(prompt);
     
     // Create a warp from the intent
-    const warp = await createWarpFromIntent(intentData);
+    const warp = await createWarpFromIntent(intentData, prompt);
     
     return {
       warp,

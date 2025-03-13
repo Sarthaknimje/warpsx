@@ -4,7 +4,7 @@ const path = require('path');
 
 // Application configuration
 const appConfig = {
-  mockMode: false, // Always use real blockchain interactions
+  mockMode: false, // Disable mock mode to use real blockchain interactions
   debug: true, // Enable debug logging
   port: process.env.PORT || 3000
 };

@@ -15,9 +15,11 @@ function stakingTemplate(validatorAddress, amount) {
         type: "contract",
         label: "Stake EGLD",
         description: "Delegate your EGLD to a validator to earn staking rewards",
-        address: "erd1qqqqqqqqqqqqqpgqqz6vp7vs3p7u8t8gxppjq8qwkx7urj4g7a3s69j92r", // Staking contract address
+        address: "erd1qqqqqqqqqqqqqpgqd9rvv2n378e27jcts8vfwynpkm8ng7g7945s2ey76d", // Staking contract address
         func: "delegate",
-        args: [], // No explicit args needed as we use value
+        args: [
+          `address:${validatorAddress}` // Add validator address as an argument
+        ],
         value: amount,
         gasLimit: 12000000,
         inputs: [
@@ -36,6 +38,7 @@ function stakingTemplate(validatorAddress, amount) {
             position: "arg:1",
             source: "field",
             required: true,
+            value: validatorAddress // Pre-fill with the validator address
           }
         ]
       }
