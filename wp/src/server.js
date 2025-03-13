@@ -34,6 +34,16 @@ app.get('/', (req, res) => {
   });
 });
 
+// App route - also render the main index page
+app.get('/app', (req, res) => {
+  res.render('index', { 
+    title: 'MultiversX AI Warp Generator',
+    result: null,
+    preview: null,
+    error: null
+  });
+});
+
 // Batch creation page
 app.get('/batch-create', (req, res) => {
   res.render('batch-create', {
